@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="styles.css">
+    <title>Acceso</title>
+</head>
+
+<body class="auth-body">
+
+<div class="auth-container">
+
+    <h2 id="tituloAuth"></h2>
+
+    <!-- LOGIN -->
+    <form id="loginForm" class="auth-form">
+        <h3>Iniciar sesión</h3>
+        <input type="email" id="loginEmail" placeholder="Email" required>
+        <input type="password" id="loginPassword" placeholder="Contraseña" required>
+        <button type="submit">Ingresar</button>
+    </form>
+
+    <!-- REGISTER -->
+    <form id="registerForm" class="auth-form">
+        <h3>Crear cuenta</h3>
+        <input type="email" id="registerEmail" placeholder="Email" required>
+        <input type="password" id="registerPassword" placeholder="Contraseña" required>
+        <button type="submit">Registrarse</button>
+    </form>
+
+    <p id="switchText"></p>
+
+</div>
+
+<script src="auth.js" defer></script>
+
+</body>
+</html>

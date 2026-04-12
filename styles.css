@@ -1,0 +1,408 @@
+:root {
+    --primary: #ff4d4d;
+    --dark: #1a1a1a;
+    --light: #ffffff;
+    --gray: #777;
+    --bg: #f5f6f8;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    background: var(--bg);
+    color: var(--dark);
+}
+
+.container {
+    padding: 20px;
+    max-width: 520px;
+    margin: auto;
+}
+
+
+/*Header*/
+.topbar {
+    position: sticky;
+    top: 0;
+    background: #000;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    z-index: 1000;
+}
+
+.brand {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+/*Live bar*/
+.live-bar {
+    background: #ff4d4d;
+    color: white;
+    text-align: center;
+    font-size: 13px;
+    padding: 8px;
+    font-weight: 600;
+}
+
+/* HERO */
+.hero {
+    text-align: center;
+    background: var(--light);
+    padding-bottom: 20px;
+}
+
+.hero-img {
+    width: 100%;
+    border-radius: 12px;
+}
+
+h1 {
+    font-size: 26px;
+    font-weight: 700;
+}
+
+.subheadline {
+    font-size: 15px;
+    color: var(--gray);
+}
+
+/* BOTONES */
+.cta {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 16px;
+    width: 100%;
+    font-size: 16px;
+    border-radius: 10px;
+    font-weight: bold;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.cta:hover {
+    background: #e63939;
+    transform: scale(1.02);
+}
+
+/* BADGES */
+.trust-badges {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--gray);
+}
+
+/* SECTIONS */
+section {
+    margin-top: 15px;
+}
+
+section h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+/* GRID PRODUCTOS */
+.grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px;
+}
+
+.producto {
+    background: white;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+    transition: transform 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 👈 centra todo */
+}
+
+.producto:active {
+    transform: scale(0.95);
+}
+
+.producto img {
+    width: 100%;
+    max-width: 130px;
+    height: 130px;
+    object-fit: contain; 
+}
+
+/* STEPS */
+.steps {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.steps div {
+    background: white;
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+/* BENEFICIOS */
+.beneficios ul {
+    list-style: none;
+    padding: 0;
+}
+
+.beneficios li {
+    background: white;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
+
+/* TESTIMONIOS */
+.testimonios-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+}
+
+.testimonio-card {
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.avatar {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.stars {
+    color: gold;
+    margin: 5px 0;
+}
+
+/*Antes despues*/
+
+.comparacion {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.lado {
+    background: white;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.lado img {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.label {
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.antes {
+    color: red;
+}
+
+.despues {
+    color: green;
+}
+
+
+/* OFERTA */
+.oferta {
+    background: var(--dark);
+    color: white;
+    text-align: center;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+/* FAQ */
+details {
+    background: white;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
+
+/* carrito */
+.cart-drawer {
+    position: fixed;
+    top: 0; /* 👈 clave */
+    right: -100%;
+    width: 320px;
+    height: 100%;
+    background: white;
+    box-shadow: -2px 0 15px rgba(0,0,0,0.3);
+    transition: right 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    z-index: 2000; 
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.cart-drawer.open {
+    right: 0;
+}
+
+.cart-header {
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 10;
+    padding-bottom: 10px;
+}
+
+#cartItems {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.cart-item {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+.cart-item img {
+    width: 50px;
+}
+
+.cart-footer {
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+}
+
+/*Animacion carrito*/
+@keyframes shake {
+    0% { transform: scale(1); }
+    25% { transform: scale(1.2); }
+    50% { transform: scale(0.95); }
+    75% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.shake {
+    animation: shake 0.3s ease;
+}
+
+
+/*Whatsapp*/
+.whatsapp-float {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #25D366;
+    color: white;
+    font-size: 24px;
+    padding: 15px;
+    border-radius: 50%;
+    text-decoration: none;
+    z-index: 999;
+}
+
+/*Icono carrito*/
+.cart-icon {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: black;
+    color: white;
+    padding: 10px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    z-index: 1000;
+    font-size: 14px;
+}
+
+/*Botones*/
+
+.qty {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.qty button {
+    padding: 4px 8px;
+    border: none;
+    background: #ddd;
+    cursor: pointer;
+}
+
+
+/* ===== AUTH ===== */
+
+.auth-body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #f5f7fa, #e4ecf7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.auth-container {
+    background: white;
+    padding: 30px;
+    border-radius: 16px;
+    width: 320px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    text-align: center;
+    animation: fadeIn 0.4s ease;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.auth-form input {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.auth-form button {
+    background: #ff4d4d;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.auth-form button:hover {
+    background: #e63c3c;
+}
+
+#switchText {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px);}
+    to { opacity: 1; transform: translateY(0);}
+}
