@@ -1,9 +1,9 @@
 const productos = [
-    { id: 1, nombre: "Faja térmica", precio: 200000, img: "./assets/imge/fajatermica.jpg" },
+    { id: 1, nombre: "Faja térmica", precio: 20000, img: "./assets/imge/fajatermica.jpg" },
     { id: 2, nombre: "Rodillera", precio: 12500, img: "./assets/imge/rodillera.jpg.jpeg" },
     { id: 3, nombre: "Tobillera", precio: 18000, img: "./assets/imge/tobillera.jpg.jpeg" },
     { id: 4, nombre: "Foam Roller", precio: 38000, img: "./assets/imge/foamroller.jpg.webp" },
-    { id: 5, nombre: "PACK Fibromagia", precio: 89000, img: "./assets/imge/pack.png" }
+    { id: 5, nombre: "PACK Fibromagia", precio: 89000, img: "./assets/imge/pack2.png" }
 ];
 
 

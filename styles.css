@@ -7,7 +7,7 @@
 }
 
 body {
-    font-family: 'Medium', Helvetica Neue (bold);
+    font-family: 'inter', Comic Sans MS, cursive, sans-serif;
     margin: 0;
     background: var(--light);
     color: var(--dark);
@@ -117,7 +117,7 @@ section h2 {
 }
 
 .producto {
-    background: #1A1A1A; /* gris oscuro */
+    background: #1A1A1A; 
     padding: 15px;
     border-radius: 12px;
     text-align: center;
@@ -469,4 +469,40 @@ details {
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(20px);}
     to { opacity: 1; transform: translateY(0);}
+}
+
+/*prueba final*/
+
+
+.cierre {
+    text-align: center;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.frase-final {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.confianza {
+    font-size: 13px;
+    color: #A0A0A0;
+    margin-bottom: 10px;
+}
+
+.insta-link {
+    display: inline-block;
+    background: #E1306C;
+    color: white;
+    padding: 10px 14px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.insta-link:hover {
+    background: #c72b5c;
 }
