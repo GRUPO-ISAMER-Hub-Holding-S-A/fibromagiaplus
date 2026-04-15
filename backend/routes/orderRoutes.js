@@ -1,6 +1,7 @@
 import express from "express";
 import nodemailer from "nodemailer";
 import PDFDocument from "pdfkit";
+import Order from "../models/order.js";
 
 const router = express.Router();
 
@@ -16,9 +17,8 @@ router.post("/crear-orden", async (req, res) => {
         const ticketId = Math.floor(Math.random() * 1000000);
         const fecha = new Date().toLocaleString();
 
-        // ======================
+
         // GENERAR PDF
-        // ======================
         const doc = new PDFDocument();
         let buffers = [];
 
@@ -28,20 +28,18 @@ router.post("/crear-orden", async (req, res) => {
             const pdfData = Buffer.concat(buffers);
 
             try {
-                // ======================
                 // MAIL
-                // ======================
                 const transporter = nodemailer.createTransport({
                     service: "gmail",
                     auth: {
-                        user: process.env.EMAIL_USER,
-                        pass: process.env.EMAIL_PASS
+                        user: process.env.MAIL_USER,
+                        pass: process.env.MAIL_PASS
                     }
                 });
 
                 const html = `
                     <h2>🧾 Ticket de compra</h2>
-                    <p><b>Empresa:</b> Sistema Lumbar 360</p>
+                    <p><b>Empresa:</b> FibromagíaPLUS</p>
                     <p><b>Ticket:</b> ${ticketId}</p>
                     <p><b>Fecha:</b> ${fecha}</p>
                     <hr>
@@ -51,10 +49,11 @@ router.post("/crear-orden", async (req, res) => {
                     <hr>
                     <h3>Total: $${total}</h3>
                     <p>Gracias por tu compra 💙</p>
+                    <h4>FibromagíaPLUS</h4>
                 `;
 
                 await transporter.sendMail({
-                    from: process.env.EMAIL_USER,
+                    from: process.env.MAIL_USER,
                     to: email,
                     subject: "Compra realizada ✔️",
                     html: html,
@@ -76,13 +75,13 @@ router.post("/crear-orden", async (req, res) => {
             }
         });
 
-        // ======================
+
         // CONTENIDO DEL PDF
-        // ======================
+
         doc.fontSize(20).text("TICKET DE COMPRA", { align: "center" });
         doc.moveDown();
 
-        doc.fontSize(12).text(`Empresa: Sistema Lumbar 360`);
+        doc.fontSize(12).text(`FibromagíaPLUS`);
         doc.text(`Ticket: ${ticketId}`);
         doc.text(`Fecha: ${fecha}`);
         doc.moveDown();
@@ -108,12 +107,29 @@ router.post("/crear-orden", async (req, res) => {
 
 router.post("/webhook", async (req, res) => {
 
-    console.log("🔥 WEBHOOK MP:", req.body);
+    try {
+        const data = req.body;
 
-    // acá después vamos a validar pago real
-    // por ahora solo confirmamos
+        console.log("🔥 WEBHOOK:", data);
 
-    res.sendStatus(200);
+
+        const order = new Order({
+            numero: Math.floor(Math.random() * 1000000),
+            items: [],
+            total: 0,
+            email: "fibromagiaplus@gmail.com"
+        });
+
+        await order.save();
+
+        console.log("✅ Orden guardada");
+
+        res.sendStatus(200);
+
+    } catch (error) {
+        console.error(error);
+        res.sendStatus(500);
+    }
 });
 
 

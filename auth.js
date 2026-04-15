@@ -5,9 +5,9 @@ const registerForm = document.getElementById("registerForm");
 const titulo = document.getElementById("tituloAuth");
 const switchText = document.getElementById("switchText");
 
-// =======================
+
 // VISTA INICIAL
-// =======================
+
 if (redirect === "checkout") {
     titulo.innerText = "Crear cuenta para finalizar compra";
     registerForm.style.display = "block";
@@ -20,9 +20,9 @@ if (redirect === "checkout") {
 
 updateSwitch();
 
-// =======================
+
 // SWITCH UX
-// =======================
+
 function updateSwitch() {
     if (loginForm.style.display === "none") {
         switchText.innerHTML = `¿Ya tenés cuenta? <span onclick="toggleAuth()" style="color:blue;cursor:pointer;">Iniciar sesión</span>`;
@@ -42,9 +42,9 @@ function toggleAuth() {
     updateSwitch();
 }
 
-// =======================
+
 // LOGIN
-// =======================
+
 loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 

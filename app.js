@@ -1,10 +1,9 @@
-// 1. DATA
-
 const productos = [
-    { id: 1, nombre: "Faja térmica", precio: 45000, img: "./assets/imge/fajatermica.jpg" },
-    { id: 2, nombre: "Rodillera", precio: 22000, img: "./assets/imge/rodillera.jpg.jpeg" },
+    { id: 1, nombre: "Faja térmica", precio: 200000, img: "./assets/imge/fajatermica.jpg" },
+    { id: 2, nombre: "Rodillera", precio: 12500, img: "./assets/imge/rodillera.jpg.jpeg" },
     { id: 3, nombre: "Tobillera", precio: 18000, img: "./assets/imge/tobillera.jpg.jpeg" },
-    { id: 4, nombre: "Foam Roller", precio: 33000, img: "./assets/imge/foamroller.jpg.webp" }
+    { id: 4, nombre: "Foam Roller", precio: 38000, img: "./assets/imge/foamroller.jpg.webp" },
+    { id: 5, nombre: "PACK Fibromagia", precio: 89000, img: "./assets/imge/pack.png" }
 ];
 
 
@@ -18,9 +17,9 @@ function actualizarLive() {
 setInterval(actualizarLive, 4000);
 actualizarLive();
 
-// =======================
+
 // 2. ESTADO (LIMPIO)
-// =======================
+
 let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
 // NORMALIZAR 
@@ -29,14 +28,14 @@ carrito = carrito.map(p => ({
     cantidad: Number(p.cantidad) || 1
 }));
 
-// =======================
+
 // 3. SELECTORES
-// =======================
+
 const cartDrawer = document.getElementById("cartDrawer");
 
-// =======================
+
 // 4. FUNCIONES CORE
-// =======================
+
 
 function guardarCarrito() {
     localStorage.setItem("carrito", JSON.stringify(carrito));
@@ -105,9 +104,9 @@ function cerrarCarrito() {
     cartDrawer.classList.remove("open");
 }
 
-// =======================
+
 // 5. RENDER
-// =======================
+
 
 function renderCarrito() {
     const container = document.getElementById("cartItems");
@@ -156,9 +155,9 @@ function actualizarContador() {
     contador.innerText = total;
 }
 
-// =======================
+
 // 6. EVENTOS
-// =======================
+
 
 // icono
 document.getElementById("cartIcon")?.addEventListener("click", abrirCarrito);
@@ -183,14 +182,23 @@ document.querySelectorAll(".producto").forEach(el => {
     });
 });
 
-// =======================
+// 🔥 PACK 
+document.getElementById("packBtn")?.addEventListener("click", () => {
+    agregarAlCarrito(5);
+    abrirCarrito();
+});
+
+
 // 7. CHECKOUT PRO
-// =======================
+
 
 document.getElementById("checkoutBtn")?.addEventListener("click", async () => {
 
-    if (carrito.length === 0) {
-        alert("Carrito vacío");
+    const user = localStorage.getItem("user");
+
+    if (!user) {
+        localStorage.setItem("redirectAfterLogin", "checkout");
+        window.location.href = "auth.html";
         return;
     }
 
@@ -264,8 +272,8 @@ function logout() {
 
 renderUser();
 
-// =======================
+
 // 8. INIT
-// =======================
+
 renderCarrito();
 actualizarContador();

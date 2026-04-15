@@ -1,10 +1,11 @@
 import express from "express";
-import mercadopago from "mercadopago";
+import { MercadoPagoConfig, Preference } from "mercadopago";
 
 const router = express.Router();
 
-mercadopago.configure({
-    access_token: process.env.MP_ACCESS_TOKEN
+// 🔐 cliente nuevo
+const client = new MercadoPagoConfig({
+    accessToken: process.env.MP_ACCESS_TOKEN
 });
 
 router.post("/crear-pago", async (req, res) => {
@@ -13,25 +14,27 @@ router.post("/crear-pago", async (req, res) => {
 
     try {
 
-        const preference = {
-            items: items.map(p => ({
-                title: p.nombre,
-                unit_price: Number(p.precio),
-                quantity: Number(p.cantidad),
-                currency_id: "ARS"
-            })),
-            back_urls: {
-                success: "http://localhost:5500/success.html",
-                failure: "http://localhost:5500/fail.html",
-                pending: "http://localhost:5500/pending.html"
-            },
-            auto_return: "approved",
-            notification_url: "http://localhost:3000/api/webhook"
-        };
+        const preference = new Preference(client);
 
-        const response = await mercadopago.preferences.create(preference);
+        const response = await preference.create({
+            body: {
+                items: items.map(p => ({
+                    title: p.nombre,
+                    unit_price: Number(p.precio),
+                    quantity: Number(p.cantidad),
+                    currency_id: "ARS"
+                })),
+                back_urls: {
+                    success: "http://localhost:5500/success.html",
+                    failure: "http://localhost:5500/fail.html",
+                    pending: "http://localhost:5500/pending.html"
+                },
+                auto_return: "approved",
+                notification_url: "https://belula.app.n8n.cloud/webhook/mp-webhook"
+            }
+        });
 
-        res.json({ url: response.body.init_point });
+        res.json({ url: response.init_point });
 
     } catch (error) {
         console.error("ERROR MP:", error);

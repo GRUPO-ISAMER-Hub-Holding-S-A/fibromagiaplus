@@ -1,15 +1,15 @@
 :root {
-    --primary: #ff4d4d;
-    --dark: #1a1a1a;
-    --light: #ffffff;
-    --gray: #777;
-    --bg: #f5f6f8;
+    --primary: #2F5BFF;
+    --dark: #FFFFFF;
+    --light: #0A0A0A;
+    --gray: #A0A0A0;
+    --bg: #1A1A1A;
 }
 
 body {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Medium', Helvetica Neue (bold);
     margin: 0;
-    background: var(--bg);
+    background: var(--light);
     color: var(--dark);
 }
 
@@ -72,7 +72,7 @@ h1 {
 /* BOTONES */
 .cta {
     background: var(--primary);
-    color: white;
+    color: #1A1A1A;
     border: none;
     padding: 16px;
     width: 100%;
@@ -85,7 +85,7 @@ h1 {
 }
 
 .cta:hover {
-    background: #e63939;
+    background: #3c78d3;
     transform: scale(1.02);
 }
 
@@ -117,18 +117,33 @@ section h2 {
 }
 
 .producto {
-    background: white;
-    padding: 10px;
-    border-radius: 10px;
+    background: #1A1A1A; /* gris oscuro */
+    padding: 15px;
+    border-radius: 12px;
     text-align: center;
-    transition: transform 0.2s ease;
+    transition: 0.3s;
     display: flex;
     flex-direction: column;
-    align-items: center; /* 👈 centra todo */
+    align-items: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+}
+
+.producto:hover {
+    transform: translateY(-5px);
 }
 
 .producto:active {
     transform: scale(0.95);
+}
+
+.producto p {
+    margin: 5px 0;
+}
+
+.producto p:nth-child(3) {
+    font-weight: bold;
+    font-size: 16px;
+    color: #2F5BFF;
 }
 
 .producto img {
@@ -138,6 +153,46 @@ section h2 {
     object-fit: contain; 
 }
 
+.btn-add {
+    margin-top: 8px;
+    padding: 10px;
+    border: none;
+    background: #2F5BFF;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    transition: 0.3s;
+}
+
+.btn-add:hover {
+    background: #3c78d3;
+}
+
+/*SECCIÓN PACK*/
+.pack {
+    background: #1A1A1A;
+    border-radius: 12px;
+    margin: 20px;
+    padding: 20px;
+    text-align: center;
+    border: 1px solid #2F5BFF;
+}
+
+.price-old {
+    text-decoration: line-through;
+    color: #A0A0A0;
+    margin: 5px 0;
+}
+
+.price-new {
+    font-size: 22px;
+    font-weight: bold;
+    color: #2F5BFF;
+    margin-bottom: 10px;
+}
+
+
 /* STEPS */
 .steps {
     display: flex;
@@ -146,7 +201,7 @@ section h2 {
 }
 
 .steps div {
-    background: white;
+    background: #2F5BFF;
     flex: 1;
     padding: 10px;
     border-radius: 10px;
@@ -160,7 +215,7 @@ section h2 {
 }
 
 .beneficios li {
-    background: white;
+    background: #1A1A1A;
     padding: 10px;
     border-radius: 8px;
     margin-bottom: 8px;
@@ -174,10 +229,11 @@ section h2 {
 }
 
 .testimonio-card {
-    background: white;
+    background: #1A1A1A;
     padding: 15px;
     border-radius: 12px;
     text-align: center;
+    font-family: 'Courier New', Courier, monospace;
 }
 
 .avatar {
@@ -202,7 +258,7 @@ section h2 {
 }
 
 .lado {
-    background: white;
+    background: #1A1A1A;
     padding: 10px;
     border-radius: 10px;
     text-align: center;
@@ -229,7 +285,7 @@ section h2 {
 
 /* OFERTA */
 .oferta {
-    background: var(--dark);
+    background: var(--light);
     color: white;
     text-align: center;
     border-radius: 10px;
@@ -238,7 +294,7 @@ section h2 {
 
 /* FAQ */
 details {
-    background: white;
+    background: #1A1A1A;
     padding: 10px;
     border-radius: 8px;
     margin-bottom: 8px;
@@ -247,11 +303,11 @@ details {
 /* carrito */
 .cart-drawer {
     position: fixed;
-    top: 0; /* 👈 clave */
+    top: 0; 
     right: -100%;
     width: 320px;
     height: 100%;
-    background: white;
+    background: #0A0A0A;
     box-shadow: -2px 0 15px rgba(0,0,0,0.3);
     transition: right 0.35s cubic-bezier(0.22, 1, 0.36, 1);
     z-index: 2000; 
@@ -267,7 +323,7 @@ details {
 .cart-header {
     position: sticky;
     top: 0;
-    background: white;
+    background: #1A1A1A;
     z-index: 10;
     padding-bottom: 10px;
 }
@@ -289,7 +345,7 @@ details {
 }
 
 .cart-footer {
-    border-top: 1px solid #ddd;
+    border-top: 1px solid #1A1A1A;
     padding-top: 10px;
 }
 
@@ -354,8 +410,8 @@ details {
 /* ===== AUTH ===== */
 
 .auth-body {
-    font-family: 'Inter', sans-serif;
-    background: linear-gradient(135deg, #f5f7fa, #e4ecf7);
+    font-family: 'Inter', Helvetica Neue (bold);
+    background: linear-gradient(135deg, #3c78d3, #4589e7);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -363,7 +419,10 @@ details {
 }
 
 .auth-container {
-    background: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #0A0A0A;
     padding: 30px;
     border-radius: 16px;
     width: 320px;
@@ -375,26 +434,31 @@ details {
 .auth-form {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
+    width: 100%;
 }
 
 .auth-form input {
     padding: 12px;
     border-radius: 8px;
-    border: 1px solid #ddd;
+    border: none;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .auth-form button {
+    width: 100%;
     background: #ff4d4d;
     color: white;
     padding: 12px;
     border: none;
     border-radius: 8px;
     cursor: pointer;
+    transition: 0.3s;
 }
 
 .auth-form button:hover {
-    background: #e63c3c;
+    background: #2F5BFF;
 }
 
 #switchText {

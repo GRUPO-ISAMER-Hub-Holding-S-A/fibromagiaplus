@@ -41,6 +41,8 @@ export const enviarMail = async (order) => {
         <h3>Total: $${order.total}</h3>
 
         <p>Gracias por confiar en nosotros 💙</p>
+
+        <h4>FibromagíaPLUS</h4>
     `;
 
     await transporter.sendMail({
