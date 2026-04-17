@@ -39,7 +39,7 @@ router.post("/crear-orden", async (req, res) => {
 
                 const html = `
                     <h2>🧾 Ticket de compra</h2>
-                    <p><b>Empresa:</b> FibromagíaPLUS</p>
+                    <p><b>Empresa:</b> FibromagiaPLUS</p>
                     <p><b>Ticket:</b> ${ticketId}</p>
                     <p><b>Fecha:</b> ${fecha}</p>
                     <hr>
@@ -49,7 +49,7 @@ router.post("/crear-orden", async (req, res) => {
                     <hr>
                     <h3>Total: $${total}</h3>
                     <p>Gracias por tu compra 💙</p>
-                    <h4>FibromagíaPLUS</h4>
+                    <h4>FibromagiaPLUS</h4>
                 `;
 
                 await transporter.sendMail({
@@ -81,7 +81,7 @@ router.post("/crear-orden", async (req, res) => {
         doc.fontSize(20).text("TICKET DE COMPRA", { align: "center" });
         doc.moveDown();
 
-        doc.fontSize(12).text(`FibromagíaPLUS`);
+        doc.fontSize(12).text(`FibromagiaPLUS`);
         doc.text(`Ticket: ${ticketId}`);
         doc.text(`Fecha: ${fecha}`);
         doc.moveDown();

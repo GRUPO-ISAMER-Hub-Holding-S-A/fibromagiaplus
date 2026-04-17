@@ -42,7 +42,7 @@ export const enviarMail = async (order) => {
 
         <p>Gracias por confiar en nosotros 💙</p>
 
-        <h4>FibromagíaPLUS</h4>
+        <h4>FibromagiaPLUS</h4>
     `;
 
     await transporter.sendMail({
