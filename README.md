@@ -183,10 +183,8 @@ POST /api/auth/login
 ## Backend
 
 ```js
-POST /api/create-preference
-```
 
-Genera link de pago dinámico.
+
 
 ---
 
@@ -195,7 +193,6 @@ Genera link de pago dinámico.
 ## Flujo:
 
 ```text
-MercadoPago → Webhook → Validación → Email → (DB opcional)
 ```
 
 ### Nodo principal:
@@ -236,67 +233,9 @@ MercadoPago → Webhook → Validación → Email → (DB opcional)
 ✔ Email único
 ✔ Backend separado del frontend
 
----
-
-# ⚠️ Problemas comunes
-
-### ❌ `document is not defined`
-
-→ Estás ejecutando frontend en Node
-
----
-
-### ❌ Error SMTP
-
-→ Verificar credenciales Gmail (usar App Password)
-
----
-
-### ❌ MercadoPago no responde
-
-→ Revisar Access Token
-
----
-
-### ❌ Webhook no funciona
-
-→ Usar ngrok o servidor online
-
----
-
-# 🔥 Próximas mejoras
-
-* Panel admin
-* Dashboard de ventas
-* Recuperación de carrito abandonado
-* Integración WhatsApp API
-* Multi-producto dinámico (DB)
-* Deploy en Vercel + Railway
-
----
-
-# 💸 Estado del proyecto
-
-✔ MVP funcional
-✔ Escalable a ecommerce real
-✔ Preparado para automatización
-
----
 
 # 👩‍💻 Autor
 
-Proyecto desarrollado como práctica avanzada de Full Stack + automatización.
+Proyecto desarrollado por Belen Villar Junqueira desarrolladora Full Stack + automatización.
 
----
 
-# 🚀 Resultado
-
-Sistema completo tipo Shopify:
-
-✔ Landing optimizada
-✔ Carrito dinámico
-✔ Login real
-✔ Pago integrado
-✔ Automatización completa
-
----
