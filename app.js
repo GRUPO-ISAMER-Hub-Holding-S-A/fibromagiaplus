@@ -1,17 +1,3 @@
-import rateLimit from "express-rate-limit";
-import cors from "cors";
-
-const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100 // limit each IP to 100 requests per windowMs
-});
-
-
-app.use(helmet());
-
-
-app.use(cors());
-
 const productos = [
     { id: 1, nombre: "Faja lumbar", precio: 20000, img: "./assets/imge/fajalumbar.jpeg" },
     { id: 2, nombre: "Rodillera", precio: 12500, img: "./assets/imge/rodillera.jpg.jpeg" },
