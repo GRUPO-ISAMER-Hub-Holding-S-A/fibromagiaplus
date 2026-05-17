@@ -17,9 +17,7 @@ dotenv.config({ path: path.join(__dirname, ".env") });
 const app = express();
 
 const allowedOrigins = [
-    "http://localhost:3000",
-    "http://localhost:5500",
-    "http://127.0.0.1:5500",
+    "https://fibromagiaplus.onrender.com",
     "https://fibromagiaplus.vercel.app",
     process.env.FRONTEND_URL
 ].filter(Boolean);
