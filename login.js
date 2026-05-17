@@ -107,24 +107,31 @@ registerForm.addEventListener("submit", async (e) => {
 
     e.preventDefault();
 
-    const name = document.getElementById("registerName").value;
+    const name = document.getElementById("registerName").value.trim();
 
-    const email = document.getElementById("registerEmail").value;
+    const email = document.getElementById("registerEmail").value.trim();
 
-    const password = document.getElementById("registerPassword").value;
+    const password = document.getElementById("registerPassword").value.trim();
 
-    try{
+    if (!name || !email || !password) {
+
+        alert("Completar todos los campos");
+
+        return;
+    }
+
+    try {
 
         const res = await fetch(
             `${API_BASE_URL}/api/auth/register`,
             {
-                method:"POST",
+                method: "POST",
 
-                headers:{
-                    "Content-Type":"application/json"
+                headers: {
+                    "Content-Type": "application/json"
                 },
 
-                body:JSON.stringify({
+                body: JSON.stringify({
                     name,
                     email,
                     password
@@ -134,23 +141,35 @@ registerForm.addEventListener("submit", async (e) => {
 
         const data = await res.json();
 
-        alert(data.message);
+        console.log("REGISTER RESPONSE:", data);
 
-        if(data.success){
+        // ERROR
+        if (!data.success) {
 
-            loginMode = true;
+            alert(
+                data.message ||
+                data.error ||
+                "Error al crear cuenta"
+            );
 
-            loginForm.style.display = "flex";
-
-            registerForm.style.display = "none";
-
-            formTitle.innerText = "Iniciar sesión";
+            return;
         }
 
-    }catch(error){
+        // SUCCESS
+        alert("Cuenta creada correctamente ✔");
 
-        console.log(error);
+        loginMode = true;
 
-        alert("Error registro");
+        loginForm.style.display = "flex";
+
+        registerForm.style.display = "none";
+
+        formTitle.innerText = "Iniciar sesión";
+
+    } catch (error) {
+
+        console.error("REGISTER ERROR:", error);
+
+        alert("Error de conexión con el servidor");
     }
 });
