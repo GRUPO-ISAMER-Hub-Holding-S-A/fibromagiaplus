@@ -1,3 +1,17 @@
+import rateLimit from "express-rate-limit";
+import cors from "cors";
+
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100 // limit each IP to 100 requests per windowMs
+});
+
+
+app.use(helmet());
+app.use(limiter);
+
+app.use(cors());
+
 const productos = [
     { id: 1, nombre: "Faja lumbar", precio: 20000, img: "./assets/imge/fajalumbar.jpeg" },
     { id: 2, nombre: "Rodillera", precio: 12500, img: "./assets/imge/rodillera.jpg.jpeg" },
@@ -9,7 +23,7 @@ const productos = [
 const API_BASE_URL = window.APP_CONFIG?.API_BASE_URL || (
     window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
         ? "http://localhost:3000"
-        : "https://fibromagiaplus-backend.onrender.com"
+        : "https://fibromagiaplus.onrender.com"
 );
 window.API_BASE_URL = API_BASE_URL;
 

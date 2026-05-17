@@ -3,7 +3,7 @@ const registerForm = document.getElementById("registerForm");
 const API_BASE_URL = window.APP_CONFIG?.API_BASE_URL || (
     window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
         ? "http://localhost:3000"
-        : "https://fibromagiaplus-backend.onrender.com"
+        : "https://fibromagiaplus.onrender.com"
 );
 window.API_BASE_URL = API_BASE_URL;
 
