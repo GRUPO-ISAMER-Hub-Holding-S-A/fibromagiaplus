@@ -8,7 +8,7 @@ const limiter = rateLimit({
 
 
 app.use(helmet());
-app.use(limiter);
+
 
 app.use(cors());
 
