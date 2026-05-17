@@ -1,0 +1,14 @@
+{
+    "exec": "node server.js",
+    "watch": [
+        "server.js",
+        "routes",
+        "models",
+        "config"
+    ],
+    "ignore": [
+        "../app.js",
+        "../index.html",
+        "../styles.css"
+    ]
+}

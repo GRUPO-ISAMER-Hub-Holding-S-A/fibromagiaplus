@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: fibromagiaplus-backend
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: FRONTEND_URL
+        value: https://fibromagiaplus.vercel.app
+      - key: MP_NOTIFICATION_URL
+        sync: false
+      - key: MP_ACCESS_TOKEN
+        sync: false
+      - key: MONGO_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: MAIL_USER
+        sync: false
+      - key: MAIL_PASS
+        sync: false

@@ -1,90 +1,131 @@
 import express from "express";
-import User from "../models/users.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+import User from "../models/users.js";
+
 const router = express.Router();
 
-// =======================
 // REGISTER
-// =======================
 router.post("/register", async (req, res) => {
-    const { email, password } = req.body;
 
     try {
-        // 🔒 validar email único
-        const existe = await User.findOne({ email });
 
-        if (existe) {
-            return res.json({
+        const name = String(req.body.name || "").trim();
+        const email = String(req.body.email || "").trim().toLowerCase();
+        const { password } = req.body;
+
+        if (!name || !email || !password) {
+
+            return res.status(400).json({
                 success: false,
-                error: "El email ya está registrado"
+                message: "Completar todos los campos"
             });
         }
 
-        // 🔐 encriptar contraseña
+        const existingUser = await User.findOne({ email });
+
+        if (existingUser) {
+
+            return res.status(400).json({
+                success: false,
+                message: "Ese email ya existe"
+            });
+        }
+
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const user = new User({
+        await User.create({
+            name,
             email,
             password: hashedPassword
         });
 
-        await user.save();
-
-        res.json({ success: true });
+        res.json({
+            success: true,
+            message: "Cuenta creada correctamente"
+        });
 
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: "Error en registro" });
+
+        console.log(error);
+
+        if (error.code === 11000) {
+            return res.status(400).json({
+                success: false,
+                message: "Ese email ya existe"
+            });
+        }
+
+        res.status(500).json({
+            success: false,
+            message: "Error en servidor"
+        });
     }
 });
 
-
-// =======================
 // LOGIN
-// =======================
 router.post("/login", async (req, res) => {
-    const { email, password } = req.body;
 
     try {
+
+        const email = String(req.body.email || "").trim().toLowerCase();
+        const { password } = req.body;
+
+        if (!process.env.JWT_SECRET) {
+            return res.status(500).json({
+                success: false,
+                message: "Falta configurar JWT_SECRET"
+            });
+        }
+
         const user = await User.findOne({ email });
 
         if (!user) {
-            return res.status(401).json({
+
+            return res.status(400).json({
                 success: false,
-                error: "Usuario no encontrado"
+                message: "Usuario no encontrado"
             });
         }
 
-        // 🔐 comparar password
-        const match = await bcrypt.compare(password, user.password);
+        const validPassword = await bcrypt.compare(
+            password,
+            user.password
+        );
 
-        if (!match) {
-            return res.status(401).json({
+        if (!validPassword) {
+
+            return res.status(400).json({
                 success: false,
-                error: "Contraseña incorrecta"
+                message: "Contraseña incorrecta"
             });
         }
 
-        // 🎟 JWT
         const token = jwt.sign(
-            { id: user._id, email: user.email },
-            "SECRET_KEY", // después lo pasamos a .env
-            { expiresIn: "1d" }
+            { id: user._id },
+            process.env.JWT_SECRET
         );
 
         res.json({
             success: true,
             token,
+
             user: {
+                id: user._id,
+                name: user.name,
                 email: user.email
             }
         });
 
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: "Error en login" });
+
+        console.log(error);
+
+        res.status(500).json({
+            success: false,
+            message: "Error login"
+        });
     }
 });
 

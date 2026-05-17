@@ -1,4 +1,10 @@
 const redirect = localStorage.getItem("redirectAfterLogin");
+const API_BASE_URL = window.APP_CONFIG?.API_BASE_URL || (
+    window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+        ? "http://localhost:3000"
+        : "https://fibromagiaplus-backend.onrender.com"
+);
+window.API_BASE_URL = API_BASE_URL;
 
 const loginForm = document.getElementById("loginForm");
 const registerForm = document.getElementById("registerForm");
@@ -52,7 +58,7 @@ loginForm.addEventListener("submit", async (e) => {
     const password = document.getElementById("loginPassword").value;
 
     try {
-        const res = await fetch("http://localhost:3000/api/login", {
+        const res = await fetch(`${API_BASE_URL}/api/login`, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({ email, password })
@@ -63,7 +69,7 @@ loginForm.addEventListener("submit", async (e) => {
         console.log("LOGIN RESPONSE:", data); // 👈 DEBUG
 
         if (!data.success) {
-            alert(data.error || "Error al iniciar sesión");
+            alert(data.message || data.error || "Error al iniciar sesión");
             return;
         }
 
@@ -84,35 +90,46 @@ loginForm.addEventListener("submit", async (e) => {
 registerForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
+    const name = document.getElementById("registerName").value;
     const email = document.getElementById("registerEmail").value;
     const password = document.getElementById("registerPassword").value;
 
-    const res = await fetch("http://localhost:3000/api/register", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ email, password })
-    });
+    try {
+        const res = await fetch(`${API_BASE_URL}/api/register`, {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({ name, email, password })
+        });
 
-    const data = await res.json();
+        const data = await res.json();
 
-    if (!data.success) {
-        alert(data.error);
-        return;
+        if (!data.success) {
+            alert(data.message || data.error || "Error al registrarse");
+            return;
+        }
+
+        // AUTO LOGIN
+        const loginRes = await fetch(`${API_BASE_URL}/api/login`, {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({ email, password })
+        });
+
+        const loginData = await loginRes.json();
+
+        if (!loginData.success) {
+            alert(loginData.message || loginData.error || "Cuenta creada, pero no se pudo iniciar sesión");
+            return;
+        }
+
+        localStorage.setItem("user", JSON.stringify(loginData.user));
+        localStorage.setItem("token", loginData.token);
+
+        redirigir();
+    } catch (error) {
+        console.error(error);
+        alert("Error de conexión con el servidor");
     }
-
-    // AUTO LOGIN
-    const loginRes = await fetch("http://localhost:3000/api/login", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ email, password })
-    });
-
-    const loginData = await loginRes.json();
-
-    localStorage.setItem("user", JSON.stringify(loginData.user));
-    localStorage.setItem("token", loginData.token);
-
-    redirigir();
 });
 
 // =======================

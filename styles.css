@@ -499,3 +499,70 @@ details {
 .insta-link:hover {
     background: #c72b5c;
 }
+
+
+/* LOGIN */
+
+.auth-body{
+    background:#0f172a;
+    font-family:'Inter',sans-serif;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    padding:20px;
+}
+
+.auth-box{
+    width:100%;
+    max-width:400px;
+    background:white;
+    padding:40px;
+    border-radius:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,.25);
+}
+
+.auth-box h1{
+    text-align:center;
+    margin-bottom:30px;
+    color:#111827;
+}
+
+.auth-form{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
+
+.auth-form input{
+    padding:14px;
+    border-radius:10px;
+    border:1px solid #d1d5db;
+    font-size:15px;
+}
+
+.auth-form button{
+    background:#2563eb;
+    color:white;
+    border:none;
+    padding:14px;
+    border-radius:10px;
+    font-weight:700;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.auth-form button:hover{
+    transform:scale(1.02);
+}
+
+#toggleAuth{
+    text-align:center;
+    margin-top:20px;
+    cursor:pointer;
+}
+
+#toggleAuth span{
+    color:#2563eb;
+    font-weight:700;
+}

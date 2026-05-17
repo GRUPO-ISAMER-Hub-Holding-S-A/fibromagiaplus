@@ -1,8 +1,66 @@
-<form id="loginForm">
-    <input type="email" id="email" placeholder="Email" required>
-    <input type="password" id="password" placeholder="Contraseña" required>
-    <button type="submit">Ingresar</button>
-</form>
+<!DOCTYPE html>
+<html lang="es">
 
+<head>
 
-<script src="auth.js"></script>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Acceso</title>
+
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+
+<body class="auth-body">
+
+    <div class="auth-box">
+
+        <h1 id="formTitle">
+            Iniciar sesión
+        </h1>
+
+        <!-- LOGIN -->
+
+        <form id="loginForm" class="auth-form">
+
+            <input type="email" id="loginEmail" placeholder="Email" required>
+
+            <input type="password" id="loginPassword" placeholder="Contraseña" required>
+
+            <button type="submit">
+                Ingresar
+            </button>
+
+        </form>
+
+        <!-- REGISTER -->
+
+        <form id="registerForm" class="auth-form" style="display:none;">
+
+            <input type="text" id="registerName" placeholder="Nombre completo" required>
+
+            <input type="email" id="registerEmail" placeholder="Email" required>
+
+            <input type="password" id="registerPassword" placeholder="Contraseña" required>
+
+            <button type="submit">
+                Crear cuenta
+            </button>
+
+        </form>
+
+        <p id="toggleAuth">
+            ¿No tenés cuenta?
+            <span>Crear cuenta</span>
+        </p>
+
+    </div>
+
+    <script src="config.js?v=20260517"></script>
+    <script src="login.js?v=20260517"></script>
+
+</body>
+
+</html>

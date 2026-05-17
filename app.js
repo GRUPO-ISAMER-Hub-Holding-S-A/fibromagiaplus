@@ -6,6 +6,12 @@ const productos = [
     { id: 5, nombre: "PACK Fibromagia", precio: 89000, img: "./assets/imge/pack2.png" }
 ];
 
+const API_BASE_URL = window.APP_CONFIG?.API_BASE_URL || (
+    window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+        ? "http://localhost:3000"
+        : "https://fibromagiaplus-backend.onrender.com"
+);
+window.API_BASE_URL = API_BASE_URL;
 
 //Contador de visitas (simple, sin backend)
 function actualizarLive() {
@@ -203,6 +209,10 @@ document.getElementById("checkoutBtn")?.addEventListener("click", async () => {
     }
 
     try {
+        if (carrito.length === 0) {
+            alert("Tu carrito esta vacio");
+            return;
+        }
 
         // 🔹 armamos items desde carrito
         const items = carrito.map(item => {
@@ -218,7 +228,7 @@ document.getElementById("checkoutBtn")?.addEventListener("click", async () => {
         console.log("ENVIANDO A MP:", items);
 
         // 🔹 llamada al backend
-        const res = await fetch("http://localhost:3000/api/crear-pago", {
+        const res = await fetch(`${API_BASE_URL}/api/crear-pago`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -229,6 +239,11 @@ document.getElementById("checkoutBtn")?.addEventListener("click", async () => {
         const data = await res.json();
 
         console.log("RESPUESTA MP:", data);
+
+        if (!res.ok) {
+            alert(data.message || "Error creando el pago");
+            return;
+        }
 
         if (!data.url) {
             alert("Error creando el pago");
