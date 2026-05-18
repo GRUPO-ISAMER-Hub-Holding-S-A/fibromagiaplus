@@ -139,21 +139,34 @@ registerForm.addEventListener("submit", async (e) => {
             }
         );
 
-        const data = await res.json();
 
-        console.log("REGISTER RESPONSE:", data);
 
-        // ERROR
-        if (!data.success) {
+const data = await res.json();
 
-            alert(
-                data.message ||
-                data.error ||
-                "Error al crear cuenta"
-            );
+console.log("STATUS:", res.status);
+console.log("REGISTER RESPONSE:", data);
 
-            return;
-        }
+if (!res.ok) {
+
+    alert(
+        data.message ||
+        data.error ||
+        "Error al crear cuenta"
+    );
+
+    return;
+}
+
+if (!data.success) {
+
+    alert(
+        data.message ||
+        data.error ||
+        "Error al crear cuenta"
+    );
+
+    return;
+}
 
         // SUCCESS
         alert("Cuenta creada correctamente ✔");
