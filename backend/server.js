@@ -7,6 +7,8 @@ import { connectDB } from "./config/db.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
+import productRoutes from "./routes/productRoutes.js";
+import helmet from "helmet";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -15,6 +17,9 @@ const rootDir = path.join(__dirname, "..");
 dotenv.config({ path: path.join(__dirname, ".env") });
 
 const app = express();
+
+app.use(helmet());
+
 
 const allowedOrigins = [
     "http://localhost:3000",
@@ -49,6 +54,8 @@ app.use("/api", orderRoutes);
 app.use("/api", authRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api", paymentRoutes);
+app.use("/api", productRoutes);
+
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {

@@ -198,42 +198,118 @@ document.getElementById("packBtn")?.addEventListener("click", () => {
 // 7. CHECKOUT PRO
 
 
+// 7. CHECKOUT PRO
+
 document.getElementById("checkoutBtn")?.addEventListener("click", async () => {
 
     const user = localStorage.getItem("user");
 
     if (!user) {
+
         localStorage.setItem("redirectAfterLogin", "checkout");
+
         window.location.href = "login.html";
+
         return;
     }
 
     try {
+
         if (carrito.length === 0) {
+
             alert("Tu carrito esta vacio");
+
             return;
         }
 
-        // 🔹 armamos items desde carrito
+        // =========================
+        // DATOS CLIENTE
+        // =========================
+
+        const cliente = {
+
+            nombre: document.getElementById("shippingName")?.value.trim(),
+
+            email: document.getElementById("shippingEmail")?.value.trim(),
+
+            telefono: document.getElementById("shippingPhone")?.value.trim()
+        };
+
+        // =========================
+        // DATOS ENVIO
+        // =========================
+
+        const envio = {
+
+            provincia: document.getElementById("shippingProvince")?.value.trim(),
+
+            ciudad: document.getElementById("shippingCity")?.value.trim(),
+
+            direccion: document.getElementById("shippingAddress")?.value.trim(),
+
+            codigoPostal: document.getElementById("shippingZip")?.value.trim()
+        };
+
+        // =========================
+        // VALIDACION
+        // =========================
+
+        if (
+            !cliente.nombre ||
+            !cliente.email ||
+            !cliente.telefono ||
+            !envio.provincia ||
+            !envio.ciudad ||
+            !envio.direccion ||
+            !envio.codigoPostal
+        ) {
+
+            alert("Completar todos los datos de envio");
+
+            return;
+        }
+
+        // =========================
+        // ITEMS
+        // =========================
+
         const items = carrito.map(item => {
+
             const p = getProducto(item.id);
 
             return {
+
                 nombre: p.nombre,
+
                 cantidad: Number(item.cantidad),
+
                 precio: Number(p.precio)
             };
         });
 
-        console.log("ENVIANDO A MP:", items);
+        console.log("ENVIANDO A MP:", {
+            items,
+            cliente,
+            envio
+        });
 
-        // 🔹 llamada al backend
+        // =========================
+        // FETCH BACKEND
+        // =========================
+
         const res = await fetch(`${API_BASE_URL}/api/crear-pago`, {
+
             method: "POST",
+
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ items })
+
+            body: JSON.stringify({
+                items,
+                cliente,
+                envio
+            })
         });
 
         const data = await res.json();
@@ -241,24 +317,32 @@ document.getElementById("checkoutBtn")?.addEventListener("click", async () => {
         console.log("RESPUESTA MP:", data);
 
         if (!res.ok) {
+
             alert(data.message || "Error creando el pago");
+
             return;
         }
 
         if (!data.url) {
+
             alert("Error creando el pago");
+
             return;
         }
 
-        // 🔥 REDIRECCIÓN A MERCADOPAGO
+        // =========================
+        // REDIRECCION MP
+        // =========================
+
         window.location.href = data.url;
 
     } catch (error) {
+
         console.error("ERROR CHECKOUT:", error);
+
         alert("Error iniciando pago");
     }
 });
-
 //cerrar sesion
 
 function renderUser() {

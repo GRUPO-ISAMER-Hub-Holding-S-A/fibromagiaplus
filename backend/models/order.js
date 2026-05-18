@@ -1,10 +1,37 @@
 import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema({
-    numero: String,
-    items: Array,
+
+    cliente: {
+        nombre: String,
+        email: String,
+        telefono: String
+    },
+
+    envio: {
+        provincia: String,
+        ciudad: String,
+        direccion: String,
+        codigoPostal: String
+    },
+
+    items: [
+        {
+            nombre: String,
+            cantidad: Number,
+            precio: Number
+        }
+    ],
+
     total: Number,
-    email: String,
+
+    estado: {
+        type: String,
+        default: "pendiente"
+    },
+
+    mpPreferenceId: String,
+
     fecha: {
         type: Date,
         default: Date.now

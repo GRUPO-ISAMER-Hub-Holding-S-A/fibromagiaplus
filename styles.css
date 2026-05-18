@@ -566,3 +566,20 @@ details {
     color:#2563eb;
     font-weight:700;
 }
+
+
+/*n8n*/
+.shipping-form{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-top:20px;
+}
+
+.shipping-form input{
+    padding:14px;
+    border-radius:12px;
+    border:none;
+    background:#f3f3f3;
+    font-size:16px;
+}
