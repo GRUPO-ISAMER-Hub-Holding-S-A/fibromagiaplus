@@ -682,3 +682,17 @@ CHECKOUT BUTTON
 
     cursor: pointer;
 }
+
+/*mas carrito*/
+
+.clear-cart-btn{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:12px;
+    margin-top:10px;
+    background:#111;
+    color:white;
+    cursor:pointer;
+    font-weight:600;
+}

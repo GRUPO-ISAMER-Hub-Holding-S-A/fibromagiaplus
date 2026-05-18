@@ -101,6 +101,19 @@ function eliminarProducto(id) {
     guardarCarrito();
 }
 
+// vaciar carrito 
+function vaciarCarrito() {
+
+    carrito = [];
+
+    localStorage.removeItem("carrito");
+
+    renderCarrito();
+
+    actualizarContador();
+}
+
+
 // abrir/cerrar
 function abrirCarrito() {
     cartDrawer.classList.add("open");
@@ -179,6 +192,8 @@ document.getElementById("buyBtn2")?.addEventListener("click", abrirCarrito);
 // cerrar
 document.getElementById("closeCart")?.addEventListener("click", cerrarCarrito);
 
+document.getElementById("clearCartBtn")?.addEventListener("click", vaciarCarrito);
+
 // productos
 document.querySelectorAll(".producto").forEach(el => {
     const id = parseInt(el.dataset.id);
@@ -195,20 +210,20 @@ document.getElementById("packBtn")?.addEventListener("click", () => {
 });
 
 
-// 7. CHECKOUT PRO
-
 
 // 7. CHECKOUT PRO
 
 document.getElementById("checkoutBtn")?.addEventListener("click", async () => {
 
-    const user = localStorage.getItem("user");
+    const shippingForm = document.getElementById("shippingForm");
 
-    if (!user) {
+    if (shippingForm.style.display === "none") {
 
-        localStorage.setItem("redirectAfterLogin", "checkout");
+        shippingForm.style.display = "flex";
 
-        window.location.href = "login.html";
+        shippingForm.scrollIntoView({
+            behavior: "smooth"
+        });
 
         return;
     }
