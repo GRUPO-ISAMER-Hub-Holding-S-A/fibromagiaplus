@@ -44,38 +44,60 @@ toggleAuth.addEventListener("click", () => {
     }
 });
 
+
+
 // LOGIN
 loginForm.addEventListener("submit", async (e) => {
 
     e.preventDefault();
 
-    const email = document.getElementById("loginEmail").value;
+    const email = document.getElementById("loginEmail").value.trim();
 
-    const password = document.getElementById("loginPassword").value;
+    const password = document.getElementById("loginPassword").value.trim();
 
     try {
+
+        console.log("ENVIANDO LOGIN A:", `${API_BASE_URL}/api/auth/login`);
 
         const res = await fetch(
             `${API_BASE_URL}/api/auth/login`,
             {
-                method:"POST",
+                method: "POST",
 
-                headers:{
-                    "Content-Type":"application/json"
+                headers: {
+                    "Content-Type": "application/json"
                 },
 
-                body:JSON.stringify({
+                body: JSON.stringify({
                     email,
                     password
                 })
             }
         );
 
+        console.log("STATUS LOGIN:", res.status);
+
         const data = await res.json();
 
-        if(!data.success){
+        console.log("RESPUESTA LOGIN:", data);
 
-            alert(data.message);
+        if (!res.ok) {
+
+            alert(
+                data.message ||
+                data.error ||
+                "Error al iniciar sesión"
+            );
+
+            return;
+        }
+
+        if (!data.success) {
+
+            alert(
+                data.message ||
+                "Login incorrecto"
+            );
 
             return;
         }
@@ -90,15 +112,15 @@ loginForm.addEventListener("submit", async (e) => {
             data.token
         );
 
-        alert("Bienvenido ✔");
+        console.log("LOGIN OK");
 
         window.location.href = "index.html";
 
-    } catch(error){
+    } catch (error) {
 
-        console.log(error);
+        console.error("ERROR LOGIN:", error);
 
-        alert("Error login");
+        alert("Error de conexión");
     }
 });
 
