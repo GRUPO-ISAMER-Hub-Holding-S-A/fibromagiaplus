@@ -1,12 +1,13 @@
 import express from "express";
 import { MercadoPagoConfig, Preference } from "mercadopago";
+import Order from "../models/order.js";
 
 const router = express.Router();
 
 const crearPago = async (req, res) => {
 
     try {
-        const { items } = req.body;
+        const { items, cliente, envio } = req.body;
         const frontendUrl = process.env.FRONTEND_URL || req.get("origin") || "http://localhost:3000";
         const notificationUrl = process.env.MP_NOTIFICATION_URL;
 
@@ -31,6 +32,10 @@ const crearPago = async (req, res) => {
             currency_id: "ARS"
         }));
 
+        const total = preferenceItems.reduce((acc, item) => {
+            return acc + (item.quantity * item.unit_price);
+        }, 0);
+
         const invalidItem = preferenceItems.find((item) => (
             !item.title ||
             !Number.isFinite(item.quantity) ||
@@ -52,8 +57,18 @@ const crearPago = async (req, res) => {
 
         const preference = new Preference(client);
 
+        const nuevaOrden = await Order.create({
+            cliente,
+            envio,
+            items,
+            total,
+            estado: "pendiente"
+        });
+
+
         const response = await preference.create({
             body: {
+                external_reference: nuevaOrden._id.toString(),
                 items: preferenceItems,
                 back_urls: {
                     success: `${frontendUrl}/success.html`,

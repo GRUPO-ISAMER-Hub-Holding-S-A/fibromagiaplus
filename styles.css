@@ -117,7 +117,7 @@ section h2 {
 }
 
 .producto {
-    background: #1A1A1A; 
+    background: #1A1A1A;
     padding: 15px;
     border-radius: 12px;
     text-align: center;
@@ -125,7 +125,7 @@ section h2 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
 }
 
 .producto:hover {
@@ -150,7 +150,7 @@ section h2 {
     width: 100%;
     max-width: 130px;
     height: 130px;
-    object-fit: contain; 
+    object-fit: contain;
 }
 
 .btn-add {
@@ -296,14 +296,14 @@ details {
 /* carrito */
 .cart-drawer {
     position: fixed;
-    top: 0; 
+    top: 0;
     right: -100%;
     width: 320px;
     height: 100%;
     background: #0A0A0A;
-    box-shadow: -2px 0 15px rgba(0,0,0,0.3);
+    box-shadow: -2px 0 15px rgba(0, 0, 0, 0.3);
     transition: right 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-    z-index: 2000; 
+    z-index: 2000;
     padding: 15px;
     display: flex;
     flex-direction: column;
@@ -344,11 +344,25 @@ details {
 
 /*Animacion carrito*/
 @keyframes shake {
-    0% { transform: scale(1); }
-    25% { transform: scale(1.2); }
-    50% { transform: scale(0.95); }
-    75% { transform: scale(1.1); }
-    100% { transform: scale(1); }
+    0% {
+        transform: scale(1);
+    }
+
+    25% {
+        transform: scale(1.2);
+    }
+
+    50% {
+        transform: scale(0.95);
+    }
+
+    75% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
 
 .shake {
@@ -419,7 +433,7 @@ details {
     padding: 30px;
     border-radius: 16px;
     width: 320px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     text-align: center;
     animation: fadeIn 0.4s ease;
 }
@@ -460,8 +474,15 @@ details {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px);}
-    to { opacity: 1; transform: translateY(0);}
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 
@@ -503,83 +524,161 @@ details {
 
 /* LOGIN */
 
-.auth-body{
-    background:#0f172a;
-    font-family:'Inter',sans-serif;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    min-height:100vh;
-    padding:20px;
+.auth-body {
+    background: #0f172a;
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
 }
 
-.auth-box{
-    width:100%;
-    max-width:400px;
-    background:white;
-    padding:40px;
-    border-radius:20px;
-    box-shadow:0 10px 30px rgba(0,0,0,.25);
+.auth-box {
+    width: 100%;
+    max-width: 400px;
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .25);
 }
 
-.auth-box h1{
-    text-align:center;
-    margin-bottom:30px;
-    color:#111827;
+.auth-box h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #111827;
 }
 
-.auth-form{
-    display:flex;
-    flex-direction:column;
-    gap:15px;
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
-.auth-form input{
-    padding:14px;
-    border-radius:10px;
-    border:1px solid #d1d5db;
-    font-size:15px;
+.auth-form input {
+    padding: 14px;
+    border-radius: 10px;
+    border: 1px solid #d1d5db;
+    font-size: 15px;
 }
 
-.auth-form button{
-    background:#2563eb;
-    color:white;
-    border:none;
-    padding:14px;
-    border-radius:10px;
-    font-weight:700;
-    cursor:pointer;
-    transition:.2s;
+.auth-form button {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .2s;
 }
 
-.auth-form button:hover{
-    transform:scale(1.02);
+.auth-form button:hover {
+    transform: scale(1.02);
 }
 
-#toggleAuth{
-    text-align:center;
-    margin-top:20px;
-    cursor:pointer;
+#toggleAuth {
+    text-align: center;
+    margin-top: 20px;
+    cursor: pointer;
 }
 
-#toggleAuth span{
-    color:#2563eb;
-    font-weight:700;
+#toggleAuth span {
+    color: #2563eb;
+    font-weight: 700;
 }
 
 
 /*n8n*/
-.shipping-form{
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-    margin-top:20px;
+/* =========================
+SHIPPING FORM
+========================= */
+
+.shipping-form {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+    margin-top: 20px;
+
+    width: 100%;
 }
 
-.shipping-form input{
-    padding:14px;
-    border-radius:12px;
-    border:none;
-    background:#f3f3f3;
-    font-size:16px;
+.shipping-form input {
+
+    width: 100%;
+
+    padding: 12px;
+
+    border-radius: 10px;
+
+    border: 1px solid #ccc;
+
+    font-size: 14px;
+
+    outline: none;
+
+    box-sizing: border-box;
+}
+
+/* =========================
+CART DRAWER FIX
+========================= */
+
+.cart-drawer {
+
+    overflow-y: auto;
+
+    overflow-x: hidden;
+
+    padding-bottom: 120px;
+}
+
+/* =========================
+MOBILE FIX
+========================= */
+
+@media (max-width: 768px) {
+
+    .cart-drawer {
+
+        width: 100% !important;
+
+        max-width: 100% !important;
+
+        right: 0;
+
+        padding: 20px;
+    }
+
+    .shipping-form input {
+
+        font-size: 16px;
+    }
+}
+
+/* =========================
+CHECKOUT BUTTON
+========================= */
+
+#checkoutBtn {
+
+    width: 100%;
+
+    margin-top: 20px;
+
+    padding: 15px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    cursor: pointer;
 }
