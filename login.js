@@ -57,7 +57,7 @@ loginForm.addEventListener("submit", async (e) => {
 
     try {
 
-        console.log("ENVIANDO LOGIN A:", `${API_BASE_URL}/api/auth/login`);
+        console.log("LOGIN A:", `${API_BASE_URL}/api/auth/login`);
 
         const res = await fetch(
             `${API_BASE_URL}/api/auth/login`,

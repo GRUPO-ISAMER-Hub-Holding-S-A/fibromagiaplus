@@ -135,13 +135,13 @@ http://localhost:3000
 ## Registro
 
 ```http
-POST /api/auth/register
+POST /api/register
 ```
 
 ## Login
 
 ```http
-POST /api/auth/login
+POST /api/login
 ```
 
 ✔ Password encriptada con bcrypt

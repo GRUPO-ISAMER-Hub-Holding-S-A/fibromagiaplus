@@ -204,7 +204,7 @@ document.getElementById("checkoutBtn")?.addEventListener("click", async () => {
 
     if (!user) {
         localStorage.setItem("redirectAfterLogin", "checkout");
-        window.location.href = "auth.html";
+        window.location.href = "login.html";
         return;
     }
 
@@ -274,7 +274,7 @@ function renderUser() {
         `;
     } else {
         container.innerHTML = `
-            <a href="auth.html">Iniciar sesión</a>
+            <a href="login.html">Iniciar sesión</a>
         `;
     }
 }
