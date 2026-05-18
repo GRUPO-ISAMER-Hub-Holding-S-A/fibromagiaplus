@@ -3,15 +3,21 @@ import Product from "../models/product.js";
 
 const router = express.Router();
 
-router.get("/productos", async (req, res) => {
+// OBTENER PRODUCTOS
+router.get("/products", async (req, res) => {
 
     try {
 
-        const productos = await Product.find();
+        const products = await Product.find();
 
-        res.json(productos);
+        res.json({
+            success: true,
+            products
+        });
 
     } catch (error) {
+
+        console.log(error);
 
         res.status(500).json({
             success: false,

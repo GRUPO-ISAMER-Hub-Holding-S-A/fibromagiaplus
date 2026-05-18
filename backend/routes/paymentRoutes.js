@@ -1,6 +1,7 @@
 import express from "express";
 import { MercadoPagoConfig, Preference } from "mercadopago";
 import Order from "../models/order.js";
+import Product from "../models/product.js";
 
 const router = express.Router();
 
@@ -24,6 +25,30 @@ const crearPago = async (req, res) => {
                 message: "El carrito esta vacio"
             });
         }
+
+        for (const item of items) {
+
+            const productoDB = await Product.findOne({
+                nombre: item.nombre
+            });
+
+            if (!productoDB) {
+
+                return res.status(404).json({
+                    success: false,
+                    message: `Producto no encontrado: ${item.nombre}`
+                });
+            }
+
+            if (productoDB.stock < item.cantidad) {
+
+                return res.status(400).json({
+                    success: false,
+                    message: `Sin stock disponible para ${item.nombre}`
+                });
+            }
+        }
+
 
         const preferenceItems = items.map((item) => ({
             title: String(item.nombre || "").trim(),
@@ -64,6 +89,21 @@ const crearPago = async (req, res) => {
             total,
             estado: "pendiente"
         });
+
+
+        for (const item of items) {
+
+            await Product.findOneAndUpdate(
+                {
+                    nombre: item.nombre
+                },
+                {
+                    $inc: {
+                        stock: -item.cantidad
+                    }
+                }
+            );
+        }
 
 
         const response = await preference.create({

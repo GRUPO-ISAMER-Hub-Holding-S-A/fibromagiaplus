@@ -20,8 +20,18 @@ const productSchema = new mongoose.Schema({
 
     img: {
         type: String
+    },
+
+    activo: {
+        type: Boolean,
+        default: true
     }
 
+}, {
+    timestamps: true
 });
 
-export default mongoose.model("Product", productSchema);
+export default mongoose.model(
+    "Product",
+    productSchema
+);
