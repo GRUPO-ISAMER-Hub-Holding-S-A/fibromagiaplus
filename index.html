@@ -10,22 +10,41 @@
     <meta property="og:title" content="Fibromagia Plus - Soluciones para los dolores">
     <meta property="og:description" content="Rehabilitacion, Medicina, Dolencias, Dolores, Tratamientos, salud.">
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 </head>
 
 
-<header class="topbar">
-    <h1 class="brand">FIBROMAGIA PLUS</h1>
-    <div id="userInfo"></div>
-</header>
+    <!-- NAV -->
+    <nav>
+        <a href="#" class="nav-logo">
+            <span class="nav-logo-dot"></span> LUMBAR FIX
+        </a>
 
-<div class="live-bar">
-    🔥 +58 personas están viendo este producto ahora
-</div>
+        <div id="adminLink"></div>
+
+        <div class="nav-right">
+
+            <a href="https://www.instagram.com/bigboss_import/" target="_blank" rel="noopener noreferrer"
+                class="nav-pill">
+
+                📸 Instagram
+
+            </a>
+
+        </div>
+    </nav>
+
 
 <body>
+
+    <div id="cur"></div>
+    <div id="cur-ring"></div>
+
 
     <!-- HERO -->
     <section class="hero">
@@ -33,6 +52,7 @@
         <div id="cartIcon" class="cart-icon">
             🛒 <span id="cartCount">0</span>
         </div>
+
 
         <div class="container">
             <img src="./assets/imge/fajalumbar.jpeg" alt="Dolor lumbar solución" class="hero-img">
@@ -76,6 +96,25 @@
         </div>
     </section>
 
+
+
+    <!-- PRODUCTOS -->
+
+    <section class="productos">
+        <div class="container grid" id="productosContainer"></div>
+    </section>
+
+
+
+    <!-- GARANTÍA -->
+    <section class="garantia">
+        <div class="container">
+            <strong>
+                <p>Garantía 7 días</p>
+            </strong>
+        </div>
+    </section>
+
     <!-- SOLUCIÓN -->
     <section class="solucion">
         <div class="container">
@@ -89,55 +128,41 @@
 
     <!-- QUÉ INCLUYE -->
 
-    <section class="productos">
-        <div class="container grid">
-
-            <div class="producto" data-id="1">
-                <img src="./assets/imge/fajalumbar.jpeg">
-                <p>Faja Lumbar</p>
-                <p>$20000</p>
-                <button class="btn-add">Agregar</button>
-            </div>
-
-            <div class="producto" data-id="2">
-                <img src="./assets/imge/rodillera.jpg.jpeg">
-                <p>Rodillera</p>
-                <p>$12500</p>
-                <button class="btn-add">Agregar</button>
-            </div>
-
-            <div class="producto" data-id="3">
-                <img src="./assets/imge/tobillera.jpg.jpeg">
-                <p>Tobillera</p>
-                <p>$18000</p>
-                <button class="btn-add">Agregar</button>
-            </div>
-
-            <div class="producto" data-id="4">
-                <img src="./assets/imge/foamroller.jpg.webp">
-                <p>Foam Roller</p>
-                <p>$38000</p>
-                <button class="btn-add">Agregar</button>
-            </div>
-
-        </div>
-    </section>
 
     <!-- SECCIÓN PACK -->
 
     <section class="pack">
+
         <div class="container">
 
-            <h2>🔥 PACK FIBROMAGIA PLUS (RECOMENDADO)</h2>
+            <img src="./assets/imge/pack2.png" alt="Pack Fibromagia" class="pack-img">
 
-            <p>Incluye: Lumbar Fix + Faja térmica + Soportes articulares + Foam Roller</p>
+            <h2>
+                🔥 PACK LUMBAR FIX (RECOMENDADO)
+            </h2>
 
-            <p class="price-old">Antes: $149.999</p>
-            <p class="price-new">Ahora: $89.999</p>
+            <p>
+                Incluye:
+                Lumbar Fix +
+                Rodillera +
+                Tobillera +
+                Foam Roller
+            </p>
 
-            <button class="cta" id="packBtn">QUIERO EL PACK COMPLETO</button>
+            <p class="price-old">
+                Antes: $149.999
+            </p>
+
+            <p class="price-new">
+                Ahora: $89.999
+            </p>
+
+            <button class="cta" id="packBtn">
+                QUIERO EL PACK COMPLETO
+            </button>
 
         </div>
+
     </section>
 
 
@@ -252,16 +277,6 @@
     </section>
 
 
-
-    <!-- GARANTÍA -->
-    <section class="garantia">
-        <div class="container">
-            <strong>
-                <p>Garantía 7 días</p>
-            </strong>
-        </div>
-    </section>
-
     <!-- FAQ -->
     <section class="faq">
         <div class="container">
@@ -283,14 +298,26 @@
     </section>
 
 
-    <section class="incluye">
-        <div class="container grid" id="productosContainer"></div>
-    </section>
+    <script>
+        // Cursor
+        const cur = document.getElementById('cur');
+        const ring = document.getElementById('cur-ring');
+        let mx = 0, my = 0, rx = 0, ry = 0;
+        document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cur.style.left = mx + 'px'; cur.style.top = my + 'px'; });
+        (function anim() { rx += (mx - rx) * .11; ry += (my - ry) * .11; ring.style.left = rx + 'px'; ring.style.top = ry + 'px'; requestAnimationFrame(anim); })();
+        document.querySelectorAll('a,button,.prod-card,.cat-card,.why-card,.payment-card').forEach(el => {
+            el.addEventListener('mouseenter', () => { cur.style.width = '18px'; cur.style.height = '18px'; ring.style.width = '50px'; ring.style.height = '50px'; ring.style.borderColor = 'rgba(0,217,255,.4)'; });
+            el.addEventListener('mouseleave', () => { cur.style.width = '10px'; cur.style.height = '10px'; ring.style.width = '36px'; ring.style.height = '36px'; ring.style.borderColor = 'rgba(0,217,255,.3)'; });
+        });
+        </script>
+
+
+
 
     <section class="oferta">
         <div class="container">
             <p class="frase-final">
-                💙 Miles de personas ya mejoraron su calidad de vida con Fibromagia Plus
+                💙 Miles de personas ya mejoraron su calidad de vida con Lumbar Fix 
             </p>
 
             <p class="confianza">
@@ -314,32 +341,15 @@
         </div>
 
         <div id="cartItems"></div>
+        <div id="cartTotal" class="cart-total">
+            Total: $0
+        </div>
 
         <button id="clearCartBtn" class="clear-cart-btn">
             Vaciar carrito
         </button>
 
-        <!-- DATOS ENVÍO -->
 
-        <div class="checkout-form">
-            <div id="shippingForm" style="display:none;">
-
-                <input type="text" id="shippingName" placeholder="Nombre completo">
-
-                <input type="email" id="shippingEmail" placeholder="Email">
-
-                <input type="text" id="shippingPhone" placeholder="Teléfono">
-
-                <input type="text" id="shippingProvince" placeholder="Provincia">
-
-                <input type="text" id="shippingCity" placeholder="Ciudad">
-
-                <input type="text" id="shippingAddress" placeholder="Dirección">
-
-                <input type="text" id="shippingZip" placeholder="Código Postal">
-            </div>
-
-        </div>
 
         <button id="checkoutBtn">
             Finalizar compra
@@ -351,7 +361,75 @@
         💬
     </a>
 
-    <script src="config.js?v=20260517"></script>
+
+
+
+    <!-- ========================= -->
+<!-- CHECKOUT MODAL -->
+<!-- ========================= -->
+
+<div id="checkoutModal" class="checkout-modal">
+
+    <div class="checkout-box">
+
+        <button id="closeCheckout" class="close-checkout">
+            ✖
+        </button>
+
+        <h2>Finalizar compra</h2>
+
+        <p class="checkout-subtitle">
+            Completá tus datos para continuar con Mercado Pago.
+        </p>
+
+        <div id="checkoutResumen"></div>
+
+        <div class="checkout-grid">
+
+            <input id="nombre" placeholder="Nombre">
+
+            <input id="apellido" placeholder="Apellido">
+
+            <input id="email" type="email" placeholder="Email">
+
+            <input id="telefono" placeholder="Teléfono">
+
+            <input id="provincia" placeholder="Provincia">
+
+            <input id="ciudad" placeholder="Ciudad">
+
+            <input id="calle" placeholder="Calle">
+
+            <input id="altura" placeholder="Altura">
+
+            <input id="piso" placeholder="Piso (Opcional)">
+
+            <input id="departamento" placeholder="Departamento (Opcional)">
+
+            <input id="cp" placeholder="Código Postal">
+
+            <input id="entreCalles" placeholder="Entre calles">
+
+        </div>
+
+        <textarea
+            id="referencia"
+            placeholder="Referencia para el repartidor (Opcional)"
+        ></textarea>
+
+        <button id="continuarPago" class="cta">
+            Continuar a Mercado Pago
+        </button>
+
+    </div>
+
+</div>
+
+
+
+
+
+    <script src="config.js"></script>
     <script src="app.js?v=20260517"></script>
 
 

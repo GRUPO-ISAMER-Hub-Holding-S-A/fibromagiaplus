@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="./assets/css/ui.css">
+    <title>BIGBOSS ADMIN</title>
+
+
+    <style>
+        body {
+            background: #0f1115;
+            color: white;
+            font-family: Arial;
+            padding: 40px;
+            padding-top: 120px;
+        }
+
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        td,
+        th {
+            border: 1px solid #333;
+            padding: 10px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+        }
+
+        button {
+            padding: 10px 15px;
+            cursor: pointer;
+        }
+
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .8);
+            z-index: 9999;
+        }
+
+        .modal-content {
+            background: #161a21;
+            width: 500px;
+            max-width: 90%;
+            margin: 100px auto;
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .modal-content input {
+            margin-bottom: 10px;
+        }
+    </style>
+
+
+
+</head>
+
+<body>
+
+    <div id="cur"></div>
+    <div id="cur-ring"></div>
+
+    <nav>
+        <a href="index.html" class="nav-logo">
+            <span class="nav-logo-dot"></span>LUMBAR FIX
+        </a>
+
+
+
+        <div class="nav-right">
+
+
+        </div>
+    </nav>
+
+
+    <h1>LUMBAR FIX ADMIN PANEL</h1>
+
+
+    <div style="
+display:flex;
+gap:15px;
+margin-bottom:30px;
+">
+
+        <button onclick="goHome()">
+            🏠 Volver al sitio
+        </button>
+
+        <button onclick="logout()">
+            🚪 Cerrar sesión
+        </button>
+
+    </div>
+
+
+    <h2>Nuevo Producto</h2>
+
+    <form id="productForm">
+
+        <input type="text" id="name" placeholder="Nombre" required>
+
+        <input type="text" id="description" placeholder="Descripción" required>
+
+        <input type="number" id="price" placeholder="Precio" required>
+
+        <input type="file" id="image" accept="image/*" required>
+
+        <input type="number" id="stock" placeholder="Stock" required>
+
+        <input type="text" id="category" placeholder="Categoría" required>
+
+        <button type="submit">
+            Crear producto
+        </button>
+
+    </form>
+
+
+
+    <div class="panel">
+        <table>
+            <thead>
+                <tr>
+                    <th>Imagen</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Categoría</th>
+                    <th>Stock</th>
+                    <th>Precio</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody id="productsTable"></tbody>
+        </table>
+    </div>
+
+
+
+    <div id="statsCards" style="
+display:flex;
+gap:20px;
+margin-bottom:30px;
+flex-wrap:wrap;
+">
+
+        <div class="card">
+            Pendientes:
+            <span id="pendingCount">
+                0
+            </span>
+        </div>
+
+        <div class="card">
+            Pagadas:
+            <span id="paidCount">
+                0
+            </span>
+        </div>
+
+        <div class="card">
+            Enviadas:
+            <span id="shippedCount">
+                0
+            </span>
+        </div>
+
+        <div class="card">
+            Entregadas:
+            <span id="deliveredCount">
+                0
+            </span>
+        </div>
+
+        <div class="card">
+            Canceladas:
+            <span id="cancelledCount">
+                0
+            </span>
+        </div>
+
+    </div>
+
+
+
+    <hr style="margin:50px 0;">
+
+    <h2>Órdenes Recibidas</h2>
+
+    <div class="panel">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Cliente</th>
+                    <th>Email</th>
+                    <th>Teléfono</th>
+                    <th>Provincia</th>
+                    <th>Localidad</th>
+                    <th>CP</th>
+                    <th>Dirección</th>
+                    <th>Piso</th>
+                    <th>Depto</th>
+                    <th>Referencia</th>
+                    <th>Productos</th>
+                    <th>Total</th>
+                    <th>Estado</th>
+                    <th>Acción</th>
+                </tr>
+
+            </thead>
+
+            <tbody id="ordersTable"></tbody>
+
+        </table>
+
+    </div>
+
+
+    <script>
+
+        function goHome() {
+
+            window.location.href =
+                "index.html";
+        }
+
+        function logout() {
+
+            localStorage.removeItem("token");
+
+            window.location.href =
+                "index.html";
+        }
+
+
+
+        const API_URL = "http://localhost:3000";
+
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+
+            alert("Debes iniciar sesión");
+
+            window.location.href = "login.html";
+        }
+
+        async function loadProducts() {
+
+            try {
+
+                const res = await fetch(`${API_URL}/products`);
+
+                if (!res.ok) {
+                    throw new Error("Error cargando productos");
+                }
+
+                const products = await res.json();
+
+                const table =
+                    document.getElementById("productsTable");
+
+                table.innerHTML = "";
+
+                products.forEach(product => {
+
+                    table.innerHTML += `
+            <tr>
+
+                <td>
+                    <img
+                        src="${product.image}"
+                        width="80"
+                        alt="${product.name}"
+                    >
+                </td>
+
+                <td>${product.name}</td>
+
+                <td>${product.description}</td>
+
+                <td>${product.category || "-"}</td>
+
+                <td>${product.stock}</td>
+
+                <td>USD ${product.price}</td>
+
+                <td>
+
+                    <button
+                        onclick="editProduct('${product.id}')"
+                    >
+                        Editar
+                    </button>
+
+                    <button
+                        onclick="deleteProduct('${product.id}')"
+                    >
+                        Eliminar
+                    </button>
+
+                </td>
+
+            </tr>
+            `;
+                });
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert("Error cargando productos");
+            }
+        }
+
+
+
+
+        async function loadOrders() {
+
+            try {
+
+                const token = localStorage.getItem("token");
+
+                const res = await fetch(
+                    `${API_URL}/admin/orders`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                );
+
+                const ordenes = await res.json();
+
+                document.getElementById(
+                    "pendingCount"
+                ).textContent =
+                    ordenes.filter(
+                        o => o.status === "PENDING"
+                    ).length;
+
+                document.getElementById(
+                    "paidCount"
+                ).textContent =
+                    ordenes.filter(
+                        o => o.status === "PAID"
+                    ).length;
+
+                document.getElementById(
+                    "shippedCount"
+                ).textContent =
+                    ordenes.filter(
+                        o => o.status === "SHIPPED"
+                    ).length;
+
+                document.getElementById(
+                    "deliveredCount"
+                ).textContent =
+                    ordenes.filter(
+                        o => o.status === "DELIVERED"
+                    ).length;
+
+                document.getElementById(
+                    "cancelledCount"
+                ).textContent =
+                    ordenes.filter(
+                        o => o.status === "CANCELLED"
+                    ).length;
+
+
+
+                const tbody =
+                    document.getElementById("ordersTable");
+
+                tbody.innerHTML = "";
+
+                ordenes.forEach(order => {
+
+                    tbody.innerHTML += `
+            <tr>
+
+                <td>${order.customerName}</td>
+
+                <td>${order.customerEmail}</td>
+
+                <td>${order.customerPhone}</td>
+
+                <td>${order.provincia}</td>
+
+                <td>${order.localidad}</td>
+
+                <td>${order.codigoPostal}</td>
+
+                <td>${order.calle} ${order.altura}</td>
+
+                <td>${order.piso || "-"}</td>
+
+                <td>${order.departamento || "-"}</td>
+
+                <td>${order.referencia || "-"}</td>
+
+                <td>${Array.isArray(order.products) ? order.products.map(p => `${p.name} x${p.cantidad}`).join("<br>") : "-"}</td>
+
+                <td>USD ${order.total}</td>
+
+                <td>${order.status}</td>
+
+<td>
+
+<select
+onchange="changeOrderStatus(
+'${order.id}',
+this.value
+)"
+>
+
+<option
+value="PENDING"
+${order.status === "PENDING" ? "selected" : ""}
+>
+Pendiente
+</option>
+
+<option
+value="PAID"
+${order.status === "PAID" ? "selected" : ""}
+>
+Pagado
+</option>
+
+<option
+value="SHIPPED"
+${order.status === "SHIPPED" ? "selected" : ""}
+>
+Enviado
+</option>
+
+<option
+value="DELIVERED"
+${order.status === "DELIVERED" ? "selected" : ""}
+>
+Entregado
+</option>
+
+<option
+value="CANCELLED"
+${order.status === "CANCELLED" ? "selected" : ""}
+>
+Cancelado
+</option>
+
+</select>
+
+</td>
+
+            </tr>
+            `;
+                });
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert("Error cargando órdenes");
+
+            }
+        }
+
+
+        async function changeOrderStatus(
+            orderId,
+            status
+        ) {
+
+            try {
+
+                const token =
+                    localStorage.getItem("token");
+
+                await fetch(
+                    `${API_URL}/admin/orders/${orderId}/status`,
+                    {
+                        method: "PUT",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json",
+
+                            Authorization:
+                                `Bearer ${token}`
+                        },
+
+                        body: JSON.stringify({
+                            status
+                        })
+                    }
+                );
+
+                loadOrders();
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert(
+                    "No se pudo actualizar"
+                );
+            }
+        }
+
+
+
+
+        async function deleteProduct(id) {
+
+            if (!confirm("¿Eliminar producto?")) return;
+
+            try {
+
+                const res = await fetch(
+                    `${API_URL}/admin/products/${id}`,
+                    {
+                        method: "DELETE",
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                );
+
+                if (!res.ok) {
+                    throw new Error("Error eliminando producto");
+                }
+
+                alert("Producto eliminado");
+
+                loadProducts();
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert("No se pudo eliminar");
+            }
+        }
+
+        async function editProduct(id) {
+
+            try {
+
+                const res = await fetch(
+                    `${API_URL}/products/${id}`
+                );
+
+                const product = await res.json();
+
+                document.getElementById("editId").value =
+                    product.id;
+
+                document.getElementById("editName").value =
+                    product.name;
+
+                document.getElementById("editDescription").value =
+                    product.description;
+
+                document.getElementById("editCategory").value =
+                    product.category || "";
+
+                document.getElementById("editStock").value =
+                    product.stock;
+
+                document.getElementById("editPrice").value =
+                    product.price;
+
+                document.getElementById("editModal")
+                    .style.display = "block";
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert("No se pudo cargar el producto");
+
+            }
+        }
+
+
+
+
+        async function saveEdit() {
+
+            const id =
+                document.getElementById(
+                    "editId"
+                ).value;
+
+            try {
+
+                const productRes =
+                    await fetch(
+                        `${API_URL}/products/${id}`
+                    );
+
+                const product =
+                    await productRes.json();
+
+                let imageUrl =
+                    product.image;
+
+                const imageFile =
+                    document.getElementById(
+                        "editImage"
+                    ).files[0];
+
+                if (imageFile) {
+
+                    const formData =
+                        new FormData();
+
+                    formData.append(
+                        "image",
+                        imageFile
+                    );
+
+                    const uploadRes =
+                        await fetch(
+                            `${API_URL}/admin/upload`,
+                            {
+                                method: "POST",
+                                headers: {
+                                    Authorization:
+                                        `Bearer ${token}`
+                                },
+                                body: formData
+                            }
+                        );
+
+                    const uploadData =
+                        await uploadRes.json();
+
+                    imageUrl =
+                        `${API_URL}${uploadData.image}`;
+                }
+
+                const data = {
+
+                    name:
+                        document.getElementById(
+                            "editName"
+                        ).value,
+
+                    description:
+                        document.getElementById(
+                            "editDescription"
+                        ).value,
+
+                    category:
+                        document.getElementById(
+                            "editCategory"
+                        ).value,
+
+                    stock: Number(
+                        document.getElementById(
+                            "editStock"
+                        ).value
+                    ),
+
+                    price: Number(
+                        document.getElementById(
+                            "editPrice"
+                        ).value
+                    ),
+
+                    image: imageUrl
+                };
+
+                const res =
+                    await fetch(
+                        `${API_URL}/admin/products/${id}`,
+                        {
+                            method: "PUT",
+                            headers: {
+                                "Content-Type":
+                                    "application/json",
+
+                                Authorization:
+                                    `Bearer ${token}`
+                            },
+                            body: JSON.stringify(data)
+                        }
+                    );
+
+                if (!res.ok) {
+
+                    throw new Error();
+                }
+
+                alert(
+                    "Producto actualizado"
+                );
+
+                closeModal();
+
+                loadProducts();
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert(
+                    "No se pudo actualizar"
+                );
+            }
+        }
+
+
+
+        function closeModal() {
+
+            document.getElementById("editModal")
+                .style.display = "none";
+        }
+
+
+
+
+
+        document
+            .getElementById("productForm")
+            .addEventListener("submit", async (e) => {
+
+                e.preventDefault();
+
+                try {
+
+                    const imageFile =
+                        document.getElementById("image")
+                            .files[0];
+
+                    let imageUrl = "";
+
+                    if (imageFile) {
+
+                        const formData =
+                            new FormData();
+
+                        formData.append(
+                            "image",
+                            imageFile
+                        );
+
+                        const uploadRes =
+                            await fetch(
+                                `${API_URL}/admin/upload`,
+                                {
+                                    method: "POST",
+                                    headers: {
+                                        Authorization:
+                                            `Bearer ${token}`
+                                    },
+                                    body: formData
+                                }
+                            );
+
+                        const uploadData =
+                            await uploadRes.json();
+
+                        imageUrl =
+                            `${API_URL}${uploadData.image}`;
+                    }
+
+                    const product = {
+
+                        name:
+                            document.getElementById("name")
+                                .value,
+
+                        description:
+                            document.getElementById("description")
+                                .value,
+
+                        price: Number(
+                            document.getElementById("price")
+                                .value
+                        ),
+
+                        image: imageUrl,
+
+                        stock: Number(
+                            document.getElementById("stock")
+                                .value
+                        ),
+
+                        category:
+                            document.getElementById("category")
+                                .value
+                    };
+
+                    const res =
+                        await fetch(
+                            `${API_URL}/admin/products`,
+                            {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type":
+                                        "application/json",
+
+                                    Authorization:
+                                        `Bearer ${token}`
+                                },
+                                body: JSON.stringify(product)
+                            }
+                        );
+
+                    if (!res.ok) {
+
+                        throw new Error();
+                    }
+
+                    alert(
+                        "Producto creado correctamente"
+                    );
+
+                    document
+                        .getElementById("productForm")
+                        .reset();
+
+                    loadProducts();
+
+                } catch (error) {
+
+                    console.error(error);
+
+                    alert(
+                        "No se pudo crear el producto"
+                    );
+                }
+            });
+
+        function logout() {
+
+            localStorage.removeItem("token");
+
+            window.location.href = "index.html";
+        }
+
+        loadProducts();
+        loadOrders();
+
+    </script>
+
+
+
+
+
+    <script src="./assets/js/cursor.js"></script>
+
+
+    <div id="editModal" class="modal">
+
+        <div class="modal-content">
+
+            <h2>Editar producto</h2>
+
+            <input type="hidden" id="editId">
+
+            <input type="text" id="editName">
+
+            <input type="text" id="editDescription">
+
+            <input type="text" id="editCategory">
+
+            <input type="number" id="editStock">
+
+            <input type="number" id="editPrice">
+
+            <input type="file" id="editImage" accept="image/*">
+
+            <button onclick="saveEdit()">
+                Guardar
+            </button>
+
+            <button onclick="closeModal()">
+                Cancelar
+            </button>
+
+        </div>
+
+    </div>
+
+
+</body>
+
+</html>

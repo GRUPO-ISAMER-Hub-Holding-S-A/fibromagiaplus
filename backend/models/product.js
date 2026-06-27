@@ -25,7 +25,14 @@ const productSchema = new mongoose.Schema({
     activo: {
         type: Boolean,
         default: true
-    }
+    },
+
+    stock: {
+        type: Number,
+        required: true,
+        default: 0,
+        min: 0
+    },
 
 }, {
     timestamps: true

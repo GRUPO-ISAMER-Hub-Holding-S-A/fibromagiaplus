@@ -2,6 +2,7 @@ import express from "express";
 import { MercadoPagoConfig, Preference } from "mercadopago";
 import Order from "../models/order.js";
 import Product from "../models/product.js";
+import { enviarMail } from "../services/mailer.js";
 
 const router = express.Router();
 
@@ -48,6 +49,61 @@ const crearPago = async (req, res) => {
                 });
             }
         }
+
+        router.post("/payment-success", async (req, res) => {
+
+            try {
+
+                const {
+                    cliente,
+                    envio,
+                    items
+                } = req.body;
+
+                let total = 0;
+
+                for (const item of items) {
+
+                    total +=
+                        item.precio *
+                        item.cantidad;
+
+                    await Product.findOneAndUpdate(
+                        {
+                            nombre: item.nombre
+                        },
+                        {
+                            $inc: {
+                                stock: -item.cantidad
+                            }
+                        }
+                    );
+                }
+
+                const order = await Order.create({
+
+                    cliente,
+                    envio,
+                    items,
+                    total,
+                    estado: "pagado"
+                });
+
+                await enviarMail(order);
+
+                res.json({
+                    success: true
+                });
+
+            } catch (error) {
+
+                console.log(error);
+
+                res.status(500).json({
+                    success: false
+                });
+            }
+        });
 
 
         const preferenceItems = items.map((item) => ({

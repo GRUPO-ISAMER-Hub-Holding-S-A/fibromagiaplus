@@ -47,7 +47,7 @@ export const enviarMail = async (order) => {
 
     await transporter.sendMail({
         from: process.env.MAIL_USER,
-        to: order.email,
+        to: order.cliente.email,
         subject: "🧾 Tu compra fue confirmada",
         html
     });
