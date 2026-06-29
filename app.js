@@ -133,7 +133,7 @@ function agregarAlCarrito(id) {
 
     if (item) {
 
-        if (item.cantidad >= producto.stock) {
+        if (item.cantidad + 1 > producto.stock) {
 
             alert("Stock máximo alcanzado");
             return;
@@ -321,6 +321,8 @@ function abrirCheckout() {
 
     renderResumenCheckout();
 
+    if (!checkoutModal) return;
+
     checkoutModal.classList.add("active");
 
     document.body.style.overflow = "hidden";
@@ -334,6 +336,71 @@ function cerrarCheckout() {
     document.body.style.overflow = "";
 
 }
+
+
+// =======================
+// RESUMEN CHECKOUT
+// =======================
+
+const checkoutResumen =
+    document.getElementById("checkoutResumen");
+
+function renderResumenCheckout() {
+
+    if (!checkoutResumen) return;
+
+    let html = "";
+
+    let total = 0;
+
+    carrito.forEach(item => {
+
+        const producto = getProducto(item.id);
+
+        if (!producto) return;
+
+        const subtotal =
+            producto.precio * item.cantidad;
+
+        total += subtotal;
+
+        html += `
+            <div class="checkout-item">
+
+                <span>
+                    ${producto.nombre}
+                    x${item.cantidad}
+                </span>
+
+                <strong>
+                    $${subtotal}
+                </strong>
+
+            </div>
+        `;
+
+    });
+
+    html += `
+
+        <div class="checkout-total">
+
+            TOTAL
+
+            <strong>
+
+                $${total}
+
+            </strong>
+
+        </div>
+
+    `;
+
+    checkoutResumen.innerHTML = html;
+
+}
+
 
 
 document
@@ -355,7 +422,6 @@ checkoutModal?.addEventListener(
 
     }
 );
-
 
 
 
@@ -408,6 +474,10 @@ window.addEventListener(
 
         actualizarContador();
 
+
+
+
+
         // BOTON HERO
         document
             .getElementById("buyBtn")
@@ -433,7 +503,9 @@ window.addEventListener(
                 }
             );
 
-            
+
+
+
         // BOTON PACK
         document
             .getElementById("packBtn")
@@ -520,3 +592,189 @@ renderUser();
 renderCarrito();
 actualizarContador();
 
+
+
+// =======================
+// CONTINUAR A MERCADO PAGO
+// =======================
+
+document
+    .getElementById("continuarPago")
+    ?.addEventListener("click", iniciarCheckout);
+
+
+async function iniciarCheckout() {
+
+    try {
+
+        if (carrito.length === 0) {
+
+            alert("El carrito está vacío");
+
+            return;
+
+        }
+
+        // =====================
+        // CLIENTE
+        // =====================
+
+        const cliente = {
+
+            nombre: document.getElementById("nombre").value.trim(),
+
+            apellido: document.getElementById("apellido").value.trim(),
+
+            email: document.getElementById("email").value.trim(),
+
+            telefono: document.getElementById("telefono").value.trim()
+
+        };
+
+        // =====================
+        // ENVÍO
+        // =====================
+
+        const envio = {
+
+            provincia: document.getElementById("provincia").value.trim(),
+
+            ciudad: document.getElementById("ciudad").value.trim(),
+
+            calle: document.getElementById("calle").value.trim(),
+
+            altura: document.getElementById("altura").value.trim(),
+
+            piso: document.getElementById("piso").value.trim(),
+
+            departamento: document.getElementById("departamento").value.trim(),
+
+            codigoPostal: document.getElementById("cp").value.trim(),
+
+            referencia: document.getElementById("referencia").value.trim(),
+
+            entreCalles: document.getElementById("entreCalles").value.trim()
+
+        };
+
+        // =====================
+        // VALIDACIÓN
+        // =====================
+
+        if (
+
+            !cliente.nombre ||
+
+            !cliente.apellido ||
+
+            !cliente.email ||
+
+            !cliente.telefono ||
+
+            !envio.provincia ||
+
+            !envio.ciudad ||
+
+            !envio.calle ||
+
+            !envio.altura ||
+
+            !envio.codigoPostal
+
+        ) {
+
+            alert("Completá todos los campos obligatorios.");
+
+            return;
+
+        }
+
+        // =====================
+        // ITEMS
+        // =====================
+
+        const items = carrito.map(item => {
+
+            const producto = getProducto(item.id);
+
+            return {
+
+                nombre: producto.nombre,
+
+                cantidad: item.cantidad,
+
+                precio: producto.precio
+
+            };
+
+        });
+
+        console.log("Checkout:", {
+
+            cliente,
+
+            envio,
+
+            items
+
+        });
+
+        const res = await fetch(
+
+            `${API_BASE_URL}/api/crear-pago`,
+
+            {
+
+                method: "POST",
+
+                headers: {
+
+                    "Content-Type": "application/json"
+
+                },
+
+                body: JSON.stringify({
+
+                    cliente,
+
+                    envio,
+
+                    items
+
+                })
+
+            }
+
+        );
+
+        const data = await res.json();
+
+        if (!res.ok) {
+
+            alert(data.message || "Error creando el pago");
+
+            return;
+
+        }
+
+        if (!data.url) {
+
+            alert("No llegó la URL de Mercado Pago");
+
+            return;
+
+        }
+
+        window.location.href = data.url;
+
+    }
+
+    catch (err) {
+
+        console.error(err);
+
+        alert("Error iniciando el checkout.");
+
+    }
+
+}

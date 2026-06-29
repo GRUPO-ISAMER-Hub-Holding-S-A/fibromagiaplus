@@ -46,7 +46,7 @@ body {
 }
 
 
-/*Header*/
+
 /* NAV */
 nav {
     position: fixed;
@@ -130,6 +130,10 @@ nav {
     text-align: center;
     background: var(--light);
     padding-bottom: 20px;
+    padding-top:120px;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
 }
 
 .hero-img {
@@ -152,22 +156,29 @@ h1 {
 
 /* BOTONES */
 .cta {
-    background: var(--cyan);
-    color: #0d48a1;
+    align-items: center;
+    gap: .5rem;
+    font-size: .82rem;
+    font-weight: 600;
+    letter-spacing: .04em;
+    margin-top: 8px;
+    padding: .85rem 2rem;
+    border-radius: var(--r-sm);
     border: none;
-    padding: 16px;
-    width: 100%;
-    font-size: 16px;
-    border-radius: 10px;
-    font-weight: bold;
-    margin-top: 10px;
+    background: var(--cyan);
+    border: 1px solid rgba(0, 217, 255, .2);
+    text-decoration: none;
+    color: #000;
+    border-radius: 8px;
     cursor: pointer;
-    transition: 0.3s;
-    border-color: rgba(0, 217, 255, .35);
+    width: 100%;
+    transition: all .3s;
+    box-shadow: 0 4px 24px rgba(0, 217, 255, .3);
+    
 }
 
 .cta:hover {
-    background: var(--cyan-light);
+    background: #1AE9FF;
     transform: translateY(-2px);
     box-shadow: 0 8px 40px rgba(0, 217, 255, .4);
 }
@@ -239,20 +250,32 @@ section h2 {
 }
 
 .btn-add {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    font-size: .82rem;
+    font-weight: 600;
+    letter-spacing: .04em;
     margin-top: 8px;
-    padding: 10px;
+    padding: .85rem 2rem;
+    border-radius: var(--r-sm);
     border: none;
-    background: #2F5BFF;
+    background: var(--cyan);
     border: 1px solid rgba(0, 217, 255, .2);
-    color: white;
+    text-decoration: none;
+    color: #000;
     border-radius: 8px;
     cursor: pointer;
     width: 100%;
-    transition: 0.3s;
+    transition: all .3s;
+    box-shadow: 0 4px 24px rgba(0, 217, 255, .3);
+    
 }
 
 .btn-add:hover {
-    background: #3c78d3;
+    background: #1AE9FF;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 30px rgba(0, 217, 255, .4);
 }
 
 /*SECCIÓN PACK*/
