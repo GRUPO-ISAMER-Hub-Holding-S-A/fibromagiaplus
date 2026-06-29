@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <link rel="stylesheet" href="./assets/css/ui.css">
-    <title>BIGBOSS ADMIN</title>
+    <title>LUMBAR FIX ADMIN</title>
 
 
     <style>
@@ -248,7 +248,13 @@ flex-wrap:wrap;
 
 
 
-        const API_URL = "http://localhost:3000";
+        const API_URL =
+    window.APP_CONFIG?.API_BASE_URL ||
+    (
+        window.location.hostname === "localhost"
+            ? "http://localhost:3000"
+            : "https://fibromagiaplus.onrender.com"
+    );
 
         const token = localStorage.getItem("token");
 

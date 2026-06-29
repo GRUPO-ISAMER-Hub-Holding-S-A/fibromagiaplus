@@ -2,136 +2,85 @@ import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema({
 
-    numero: {
-        type: String,
-        unique: true
-    },
-
     cliente: {
 
-        nombre: {
-            type: String,
-            required: true
-        },
-
-        apellido: {
-            type: String,
-            default: ""
-        },
-
-        email: {
-            type: String,
-            required: true
-        },
-
-        telefono: {
-            type: String,
-            required: true
-        }
+        nombre: String,
+        apellido: String,
+        email: String,
+        telefono: String
 
     },
 
     envio: {
 
         provincia: String,
-
         ciudad: String,
-
-        direccion: String,
-
+        calle: String,
         altura: String,
-
-        casa: String,
-
+        piso: String,
         departamento: String,
-
         codigoPostal: String,
-
-        entreCalles: String,
-
-        descripcion: String
+        referencia: String
 
     },
 
-    items: [
+    productos: [
 
         {
 
-            productId: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "Product"
-            },
+            productoId: String,
 
             nombre: String,
 
             cantidad: Number,
 
-            precio: Number,
-
-            subtotal: Number
+            precio: Number
 
         }
 
     ],
 
     total: {
+
         type: Number,
         required: true
+
     },
 
-    estado: {
+    paymentId: {
+
+        type: String,
+        default: ""
+
+    },
+
+    preferenceId: {
+
+        type: String,
+        default: ""
+
+    },
+
+    estadoPago: {
 
         type: String,
 
-        enum: [
-            "pendiente",
-            "pagado",
-            "preparando",
-            "enviado",
-            "entregado",
-            "cancelado"
-        ],
-
-        default: "pendiente"
+        default: "Pendiente"
 
     },
 
-    paymentId: String,
+    estadoEnvio: {
 
-    preferenceId: String,
+        type: String,
 
-    externalReference: String,
-
-    fecha: {
-
-        type: Date,
-
-        default: Date.now
+        default: "Recibido"
 
     }
 
-},
-{
+}, {
+
     timestamps: true
-});
-
-orderSchema.pre("save", function(next){
-
-    if(!this.numero){
-
-        this.numero =
-            "FBM-" +
-            Date.now() +
-            "-" +
-            Math.floor(Math.random()*1000);
-
-    }
-
-    next();
 
 });
 
-export default mongoose.model(
-    "Order",
-    orderSchema
-);
+export default mongoose.model("Order", orderSchema);
