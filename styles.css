@@ -30,6 +30,7 @@ html {
 }
 
 body {
+    min-height: 100vh;
     background: var(--bg);
     color: var(--text);
     font-family: 'Space Grotesk', sans-serif;
@@ -1012,5 +1013,47 @@ grid-template-columns:1fr;
 padding:20px;
 
 }
+
+}
+
+
+/* FOOTER */
+
+.footer {
+    padding: 30px;
+    text-align: center;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.6);
+    font-size: 14px;
+    
+}
+
+.footer a {
+    color: #5cd1ff;
+    text-decoration: none;
+    margin: 0 8px;
+    transition: 0.3s;
+}
+
+.footer a:hover {
+    color: white;
+}
+
+
+
+@media(max-width:900px) {
+
+    .hero {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .hero-img img {
+        width: 300px;
+    }
+
+    header {
+        padding: 20px;
+    }
 
 }

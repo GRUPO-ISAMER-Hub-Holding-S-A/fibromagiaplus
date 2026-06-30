@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Política de Privacidad | Lumbar Fix</title>
+    <link rel="icon" href="./assets/muleta.png" />
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    
+    <div id="cur"></div>
+    <div id="cur-ring"></div>
+
+
+    <header>
+    <!-- NAV -->
+    <nav>
+        <a href="index.html" class="nav-logo">
+            <span class="nav-logo-dot"></span>Lumbar Fix
+        </a>
+
+
+        <div id="adminLink"></div>
+
+        <div class="nav-right"></div>
+    </nav>
+    </header>
+
+    <section class="section">
+
+        <div class="section-title">
+            POLÍTICA DE PRIVACIDAD
+        </div>
+
+        <p>
+            En Lumbar Fix respetamos y protegemos la privacidad de nuestros usuarios y clientes.
+        </p>
+
+        <h3>Información recopilada</h3>
+
+        <p>
+            Podemos recopilar información como nombre, correo electrónico y datos de contacto enviados voluntariamente mediante formularios del sitio.
+        </p>
+
+        <h3>Uso de la información</h3>
+
+        <p>
+            La información recopilada se utiliza únicamente para:
+        </p>
+
+        <ul>
+            <li>Responder consultas</li>
+            <li>Brindar servicios</li>
+            <li>Mejorar nuestros sistemas</li>
+            <li>Enviar comunicaciones relacionadas</li>
+        </ul>
+
+        <h3>Protección de datos</h3>
+
+        <p>
+            Implementamos medidas de seguridad técnicas y organizativas para proteger la información contra accesos no autorizados.
+        </p>
+
+        <h3>Terceros</h3>
+
+        <p>
+            Lumbar Fix no vende ni comparte información personal con terceros, salvo obligación legal.
+        </p>
+
+        <h3>Contacto</h3>
+
+        <p>
+            Para consultas relacionadas con privacidad o datos personales, puede comunicarse mediante nuestros canales oficiales.
+        </p>
+
+    </section>
+
+
+
+<div class="footer">
+    © 2026 Lumbar Fix |
+    <a href="privacidad.html">Política de privacidad</a> |
+    <a href="terminos.html">Términos y condiciones</a>
+</div>
+
+
+
+    <script>
+        // Cursor
+        const cur = document.getElementById('cur');
+        const ring = document.getElementById('cur-ring');
+        let mx = 0, my = 0, rx = 0, ry = 0;
+        document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cur.style.left = mx + 'px'; cur.style.top = my + 'px'; });
+        (function anim() { rx += (mx - rx) * .11; ry += (my - ry) * .11; ring.style.left = rx + 'px'; ring.style.top = ry + 'px'; requestAnimationFrame(anim); })();
+        document.querySelectorAll('a,button,.prod-card,.cat-card,.why-card,.payment-card').forEach(el => {
+            el.addEventListener('mouseenter', () => { cur.style.width = '18px'; cur.style.height = '18px'; ring.style.width = '50px'; ring.style.height = '50px'; ring.style.borderColor = 'rgba(0,217,255,.4)'; });
+            el.addEventListener('mouseleave', () => { cur.style.width = '10px'; cur.style.height = '10px'; ring.style.width = '36px'; ring.style.height = '36px'; ring.style.borderColor = 'rgba(0,217,255,.3)'; });
+        });
+        </script>
+
+</body>
+
+</html>
