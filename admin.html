@@ -344,7 +344,7 @@ flex-wrap:wrap;
                 const token = localStorage.getItem("token");
 
                 const res = await fetch(
-                    `${API_URL}/admin/orders`,
+                    `${API_URL}/api/admin/orders`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`
@@ -500,7 +500,7 @@ Cancelado
                     localStorage.getItem("token");
 
                 await fetch(
-                    `${API_URL}/admin/orders/${orderId}/status`,
+                    `${API_URL}/api/admin/orders/${orderId}/status`,
                     {
                         method: "PUT",
 
@@ -540,7 +540,7 @@ Cancelado
             try {
 
                 const res = await fetch(
-                    `${API_URL}/admin/products/${id}`,
+                    `${API_URL}/api/admin/products/${id}`,
                     {
                         method: "DELETE",
                         headers: {
@@ -570,7 +570,7 @@ Cancelado
             try {
 
                 const res = await fetch(
-                    `${API_URL}/products/${id}`
+                    `${API_URL}/api/admin/products/${id}`
                 );
 
                 const product = await res.json();
@@ -697,7 +697,7 @@ Cancelado
 
                 const res =
                     await fetch(
-                        `${API_URL}/admin/products/${id}`,
+                        `${API_URL}/api/admin/products/${id}`,
                         {
                             method: "PUT",
                             headers: {
@@ -819,7 +819,7 @@ Cancelado
 
                     const res =
                         await fetch(
-                            `${API_URL}/admin/products`,
+                            `${API_URL}/api/admin/products`,
                             {
                                 method: "POST",
                                 headers: {

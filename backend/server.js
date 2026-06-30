@@ -8,6 +8,7 @@ import orderRoutes from "./routes/orderRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js";
 import helmet from "helmet";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -57,6 +58,10 @@ app.use("/api", authRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api", paymentRoutes);
 app.use("/api", productRoutes);
+
+
+
+app.use("/api/admin", adminRoutes);
 
 const PORT = process.env.PORT || 3000;
 
