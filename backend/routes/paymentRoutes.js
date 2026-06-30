@@ -50,60 +50,7 @@ const crearPago = async (req, res) => {
             }
         }
 
-        router.post("/payment-success", async (req, res) => {
 
-            try {
-
-                const {
-                    cliente,
-                    envio,
-                    items
-                } = req.body;
-
-                let total = 0;
-
-                for (const item of items) {
-
-                    total +=
-                        item.precio *
-                        item.cantidad;
-
-                    await Product.findOneAndUpdate(
-                        {
-                            nombre: item.nombre
-                        },
-                        {
-                            $inc: {
-                                stock: -item.cantidad
-                            }
-                        }
-                    );
-                }
-
-                const order = await Order.create({
-
-                    cliente,
-                    envio,
-                    items,
-                    total,
-                    estado: "pagado"
-                });
-
-                await enviarMail(order);
-
-                res.json({
-                    success: true
-                });
-
-            } catch (error) {
-
-                console.log(error);
-
-                res.status(500).json({
-                    success: false
-                });
-            }
-        });
 
 
         const preferenceItems = items.map((item) => ({
@@ -139,41 +86,42 @@ const crearPago = async (req, res) => {
         const preference = new Preference(client);
 
         const nuevaOrden = await Order.create({
+
             cliente,
+
             envio,
-            items,
+
+            productos: items,
+
             total,
-            estado: "pendiente"
+
+            estadoPago: "Pendiente",
+
+            estadoEnvio: "Recibido"
+
         });
 
 
-        for (const item of items) {
-
-            await Product.findOneAndUpdate(
-                {
-                    nombre: item.nombre
-                },
-                {
-                    $inc: {
-                        stock: -item.cantidad
-                    }
-                }
-            );
-        }
 
 
         const response = await preference.create({
             body: {
+
                 external_reference: nuevaOrden._id.toString(),
+
+                notification_url: process.env.MP_NOTIFICATION_URL,
+
                 items: preferenceItems,
+
                 back_urls: {
                     success: `${frontendUrl}/success.html`,
                     failure: `${frontendUrl}/index.html`,
                     pending: `${frontendUrl}/index.html`
-                },
-                ...(notificationUrl ? { notification_url: notificationUrl } : {})
+                }
+
             }
         });
+
 
         res.json({
             success: true,

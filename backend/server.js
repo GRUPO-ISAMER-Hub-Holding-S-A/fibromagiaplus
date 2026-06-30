@@ -9,6 +9,7 @@ import authRoutes from "./routes/authRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
+import webhookRoutes from "./routes/webhookRoutes.js";
 import helmet from "helmet";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -63,6 +64,7 @@ app.use("/api", productRoutes);
 
 
 app.use("/api/admin", adminRoutes);
+app.use("/api/webhook", webhookRoutes);
 
 const PORT = process.env.PORT || 3000;
 
