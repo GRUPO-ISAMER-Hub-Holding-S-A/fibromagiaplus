@@ -249,12 +249,12 @@ flex-wrap:wrap;
 
 
         const API_URL =
-    window.APP_CONFIG?.API_BASE_URL ||
-    (
-        window.location.hostname === "localhost"
-            ? "http://localhost:3000"
-            : "https://fibromagiaplus.onrender.com"
-    );
+            window.APP_CONFIG?.API_BASE_URL ||
+            (
+                window.location.hostname === "localhost"
+                    ? "http://localhost:3000"
+                    : "https://fibromagiaplus.onrender.com"
+            );
 
         const token = localStorage.getItem("token");
 
@@ -269,7 +269,7 @@ flex-wrap:wrap;
 
             try {
 
-                const res = await fetch(`${API_URL}/products`);
+                const res = await fetch(`${API_URL}/api/admin/products`);
 
                 if (!res.ok) {
                     throw new Error("Error cargando productos");
@@ -289,32 +289,32 @@ flex-wrap:wrap;
 
                 <td>
                     <img
-                        src="${product.image}"
+                        src="${product.img}"
                         width="80"
-                        alt="${product.name}"
+                        alt="${product.nombre}"
                     >
                 </td>
 
-                <td>${product.name}</td>
+                <td>${product.nombre}</td>
 
-                <td>${product.description}</td>
+                <td>${product.descripcion || "-"}</td>
 
-                <td>${product.category || "-"}</td>
+                <td>${product.categoria || "-"}</td>
 
                 <td>${product.stock}</td>
 
-                <td>USD ${product.price}</td>
+                <td>$$ ${product.precio}</td>
 
                 <td>
 
                     <button
-                        onclick="editProduct('${product.id}')"
+                        onclick="editProduct('${product._id}')"
                     >
                         Editar
                     </button>
 
                     <button
-                        onclick="deleteProduct('${product.id}')"
+                        onclick="deleteProduct('${product._id}')"
                     >
                         Eliminar
                     </button>
@@ -357,37 +357,29 @@ flex-wrap:wrap;
                 document.getElementById(
                     "pendingCount"
                 ).textContent =
-                    ordenes.filter(
-                        o => o.status === "PENDING"
-                    ).length;
+                    ordenes.filter(o => o.estadoPago === "Pendiente").length;
 
                 document.getElementById(
                     "paidCount"
                 ).textContent =
-                    ordenes.filter(
-                        o => o.status === "PAID"
-                    ).length;
+                    ordenes.filter(o=>o.estadoPago==="Pagado").length;
 
                 document.getElementById(
                     "shippedCount"
                 ).textContent =
                     ordenes.filter(
-                        o => o.status === "SHIPPED"
+                        o => o.estadoEnvio === "Despachado"
                     ).length;
 
                 document.getElementById(
                     "deliveredCount"
                 ).textContent =
-                    ordenes.filter(
-                        o => o.status === "DELIVERED"
-                    ).length;
+                    ordenes.filter(o => o.estadoEnvio === "Entregado").length;
 
                 document.getElementById(
                     "cancelledCount"
                 ).textContent =
-                    ordenes.filter(
-                        o => o.status === "CANCELLED"
-                    ).length;
+                    ordenes.filter(o=>o.estadoEnvio==="Despachado").length;
 
 
 
@@ -399,84 +391,111 @@ flex-wrap:wrap;
                 ordenes.forEach(order => {
 
                     tbody.innerHTML += `
-            <tr>
 
-                <td>${order.customerName}</td>
+<tr>
 
-                <td>${order.customerEmail}</td>
+<td>${order.cliente?.nombre || ""} ${order.cliente?.apellido || ""}</td>
 
-                <td>${order.customerPhone}</td>
+<td>${order.cliente?.email || "-"}</td>
 
-                <td>${order.provincia}</td>
+<td>${order.cliente?.telefono || "-"}</td>
 
-                <td>${order.localidad}</td>
+<td>${order.envio?.provincia || "-"}</td>
 
-                <td>${order.codigoPostal}</td>
+<td>${order.envio?.ciudad || "-"}</td>
 
-                <td>${order.calle} ${order.altura}</td>
+<td>${order.envio?.codigoPostal || "-"}</td>
 
-                <td>${order.piso || "-"}</td>
+<td>${order.envio?.calle || ""} ${order.envio?.altura || ""}</td>
 
-                <td>${order.departamento || "-"}</td>
+<td>${order.envio?.piso || "-"}</td>
 
-                <td>${order.referencia || "-"}</td>
+<td>${order.envio?.departamento || "-"}</td>
 
-                <td>${Array.isArray(order.products) ? order.products.map(p => `${p.name} x${p.cantidad}`).join("<br>") : "-"}</td>
-
-                <td>USD ${order.total}</td>
-
-                <td>${order.status}</td>
+<td>${order.envio?.referencia || "-"}</td>
 
 <td>
 
-<select
-onchange="changeOrderStatus(
-'${order.id}',
-this.value
-)"
->
+${(order.productos || []).map(p => `
+${p.nombre}
+<br>
+Cantidad: ${p.cantidad}
+<br>
+$${p.precio}
+<hr>
+`).join("")
 
-<option
-value="PENDING"
-${order.status === "PENDING" ? "selected" : ""}
->
-Pendiente
-</option>
-
-<option
-value="PAID"
-${order.status === "PAID" ? "selected" : ""}
->
-Pagado
-</option>
-
-<option
-value="SHIPPED"
-${order.status === "SHIPPED" ? "selected" : ""}
->
-Enviado
-</option>
-
-<option
-value="DELIVERED"
-${order.status === "DELIVERED" ? "selected" : ""}
->
-Entregado
-</option>
-
-<option
-value="CANCELLED"
-${order.status === "CANCELLED" ? "selected" : ""}
->
-Cancelado
-</option>
-
-</select>
+                        }
 
 </td>
 
-            </tr>
-            `;
+<td>$${order.total}</td>
+
+<td>
+
+<div>
+Pago:
+<b>${order.estadoPago}</b>
+
+<br><br>
+
+Envío:
+<b>${order.estadoEnvio}</b>
+
+</div>
+
+</td>
+
+<td>
+
+<select id="status-${order._id}">
+
+    <option value="Recibido" ${order.estadoEnvio === "Recibido" ? "selected" : ""}>
+        Recibido
+    </option>
+
+    <option value="Preparando" ${order.estadoEnvio === "Preparando" ? "selected" : ""}>
+        Preparando
+    </option>
+
+    <option value="Despachado" ${order.estadoEnvio === "Despachado" ? "selected" : ""}>
+        Despachado
+    </option>
+
+    <option value="Entregado" ${order.estadoEnvio === "Entregado" ? "selected" : ""}>
+        Entregado
+    </option>
+
+</select>
+
+<br><br>
+
+<button
+class="saveBtn"
+onclick="guardarEstado('${order._id}')"
+>
+
+💾 Guardar
+
+</button>
+
+<br><br>
+
+<button
+class="deleteBtn"
+onclick="deleteOrder('${order._id}')"
+>
+
+🗑 Eliminar
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
                 });
 
             } catch (error) {
@@ -486,6 +505,21 @@ Cancelado
                 alert("Error cargando órdenes");
 
             }
+        }
+
+
+        async function guardarEstado(id) {
+
+            const estado =
+                document.getElementById(`status-${id}`).value;
+
+            await changeOrderStatus(
+                id,
+                estado
+            );
+
+            alert("Estado actualizado correctamente.");
+
         }
 
 
@@ -518,6 +552,10 @@ Cancelado
                     }
                 );
 
+
+
+
+
                 loadOrders();
 
             } catch (error) {
@@ -530,6 +568,45 @@ Cancelado
             }
         }
 
+
+
+        async function deleteOrder(id) {
+
+            if (!confirm("¿Eliminar pedido?")) return;
+
+            try {
+
+                const token = localStorage.getItem("token");
+
+                await fetch(
+
+                    `${API_URL}/api/admin/orders/${id}`,
+
+                    {
+
+                        method: "DELETE",
+
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+
+                    }
+
+                );
+
+                loadOrders();
+
+            }
+
+            catch (error) {
+
+                console.error(error);
+
+                alert("No se pudo eliminar");
+
+            }
+
+        }
 
 
 
@@ -576,13 +653,13 @@ Cancelado
                 const product = await res.json();
 
                 document.getElementById("editId").value =
-                    product.id;
+                    product._id;
 
                 document.getElementById("editName").value =
-                    product.name;
+                    product.nombre;
 
                 document.getElementById("editDescription").value =
-                    product.description;
+                    product.descripcion;
 
                 document.getElementById("editCategory").value =
                     product.category || "";
@@ -591,7 +668,7 @@ Cancelado
                     product.stock;
 
                 document.getElementById("editPrice").value =
-                    product.price;
+                    product.precio;
 
                 document.getElementById("editModal")
                     .style.display = "block";
@@ -619,14 +696,14 @@ Cancelado
 
                 const productRes =
                     await fetch(
-                        `${API_URL}/products/${id}`
+                        `${API_URL}/api/admin/products/${id}`
                     );
 
                 const product =
                     await productRes.json();
 
                 let imageUrl =
-                    product.image;
+                    product.img;
 
                 const imageFile =
                     document.getElementById(
@@ -645,7 +722,7 @@ Cancelado
 
                     const uploadRes =
                         await fetch(
-                            `${API_URL}/admin/upload`,
+                            `${API_URL}/api/admin/upload`,
                             {
                                 method: "POST",
                                 headers: {
@@ -665,17 +742,17 @@ Cancelado
 
                 const data = {
 
-                    name:
+                    nombre:
                         document.getElementById(
                             "editName"
                         ).value,
 
-                    description:
+                    descripcion:
                         document.getElementById(
                             "editDescription"
                         ).value,
 
-                    category:
+                    categoria:
                         document.getElementById(
                             "editCategory"
                         ).value,
@@ -686,13 +763,13 @@ Cancelado
                         ).value
                     ),
 
-                    price: Number(
+                    precio: Number(
                         document.getElementById(
                             "editPrice"
                         ).value
                     ),
 
-                    image: imageUrl
+                    img: imageUrl
                 };
 
                 const res =
@@ -772,7 +849,7 @@ Cancelado
 
                         const uploadRes =
                             await fetch(
-                                `${API_URL}/admin/upload`,
+                                `${API_URL}/api/admin/upload`,
                                 {
                                     method: "POST",
                                     headers: {
@@ -792,27 +869,27 @@ Cancelado
 
                     const product = {
 
-                        name:
+                        nombre:
                             document.getElementById("name")
                                 .value,
 
-                        description:
+                        descripcion:
                             document.getElementById("description")
                                 .value,
 
-                        price: Number(
+                        precio: Number(
                             document.getElementById("price")
                                 .value
                         ),
 
-                        image: imageUrl,
+                        img: imageUrl,
 
                         stock: Number(
                             document.getElementById("stock")
                                 .value
                         ),
 
-                        category:
+                        categoria:
                             document.getElementById("category")
                                 .value
                     };

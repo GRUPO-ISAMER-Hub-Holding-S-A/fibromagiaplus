@@ -26,6 +26,36 @@ export const getProducts = async (req, res) => {
 
 };
 
+export const getProductById = async (req, res) => {
+
+    try {
+
+        const product = await Product.findById(req.params.id);
+
+        if (!product) {
+
+            return res.status(404).json({
+                success: false,
+                message: "Producto no encontrado"
+            });
+
+        }
+
+        res.json(product);
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+            success: false,
+            message: "Error obteniendo producto"
+        });
+
+    }
+
+};
+
 export const createProduct = async (req, res) => {
 
     try {
@@ -156,6 +186,34 @@ export const updateOrderStatus = async (req, res) => {
         res.json(order);
 
     } catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+
+            success: false
+
+        });
+
+    }
+
+};
+
+export const deleteOrder = async (req, res) => {
+
+    try {
+
+        await Order.findByIdAndDelete(req.params.id);
+
+        res.json({
+
+            success: true
+
+        });
+
+    }
+
+    catch (error) {
 
         console.error(error);
 

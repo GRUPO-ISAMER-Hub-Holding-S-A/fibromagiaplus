@@ -66,6 +66,13 @@ app.use("/api", productRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/webhook", webhookRoutes);
 
+app.use(
+    "/uploads",
+    express.static(
+        path.join(process.cwd(), "uploads")
+    )
+);
+
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
