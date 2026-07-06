@@ -9,7 +9,10 @@ export const getProducts = async (req, res) => {
 
     try {
 
-        const products = await Product.find().sort({ createdAt: -1 });
+        const products = await Product.find({ activo: true })
+            .sort({
+                createdAt: -1
+            });
 
         res.json(products);
 
@@ -60,48 +63,131 @@ export const createProduct = async (req, res) => {
 
     try {
 
-        const product = await Product.create(req.body);
+        const {
+            nombre,
+            descripcion,
+            categoria,
+            precio,
+            stock,
+            img
+        } = req.body;
 
-        res.status(201).json(product);
+        const product = await Product.create({
+
+            nombre,
+            descripcion,
+            categoria,
+
+            precio: Number(precio),
+
+            stock: Number(stock),
+
+            img,
+
+            activo: true
+
+        });
+
+        res.status(201).json({
+            success: true,
+            product
+        });
 
     } catch (error) {
 
         console.error(error);
 
         res.status(500).json({
+
             success: false,
-            message: "No se pudo crear el producto"
+
+            message: "Error creando producto"
+
         });
 
     }
 
 };
 
+
 export const updateProduct = async (req, res) => {
 
     try {
+
+        const {
+
+            nombre,
+            descripcion,
+            categoria,
+            precio,
+            stock,
+            img,
+            activo
+
+        } = req.body;
 
         const product = await Product.findByIdAndUpdate(
 
             req.params.id,
 
-            req.body,
+            {
+
+                nombre,
+                descripcion,
+                categoria,
+
+                precio: Number(precio),
+
+                stock: Number(stock),
+
+                img,
+
+                activo
+
+            },
 
             {
-                new: true
+
+                new: true,
+
+                runValidators: true
+
             }
 
         );
 
-        res.json(product);
+        if (!product) {
 
-    } catch (error) {
+            return res.status(404).json({
+
+                success: false,
+
+                message: "Producto inexistente"
+
+            });
+
+        }
+
+        res.json({
+
+            success: true,
+
+            product
+
+        });
+
+    }
+
+    catch (error) {
 
         console.error(error);
 
         res.status(500).json({
+
             success: false,
-            message: "No se pudo actualizar"
+
+            message: "Error actualizando"
+
         });
 
     }
@@ -112,19 +198,34 @@ export const deleteProduct = async (req, res) => {
 
     try {
 
-        await Product.findByIdAndDelete(req.params.id);
+        await Product.findByIdAndUpdate(
+
+            req.params.id,
+
+            {
+
+                activo: false
+
+            }
+
+        );
 
         res.json({
+
             success: true
+
         });
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         console.error(error);
 
         res.status(500).json({
-            success: false,
-            message: "No se pudo eliminar"
+
+            success: false
+
         });
 
     }
@@ -165,34 +266,37 @@ export const updateOrderStatus = async (req, res) => {
 
     try {
 
-        const order = await Order.findByIdAndUpdate(
+        console.log("BODY:", req.body);
 
-            req.params.id,
+        const order = await Order.findById(req.params.id);
 
-            {
+        if (!order) {
+            return res.status(404).json({
+                success: false,
+                message: "Pedido no encontrado"
+            });
+        }
 
-                status: req.body.status
+        console.log("ANTES:", order.estadoEnvio);
 
-            },
+        order.estadoEnvio = req.body.status;
 
-            {
+        console.log("DESPUES:", order.estadoEnvio);
 
-                new: true
+        await order.save();
 
-            }
+        const actualizado = await Order.findById(req.params.id);
 
-        );
+        console.log("MONGO:", actualizado.estadoEnvio);
 
-        res.json(order);
+        res.json(actualizado);
 
     } catch (error) {
 
         console.error(error);
 
         res.status(500).json({
-
             success: false
-
         });
 
     }

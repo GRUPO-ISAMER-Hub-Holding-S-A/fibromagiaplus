@@ -3,8 +3,9 @@ import dotenv from "dotenv";
 import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
+import auth from "./middlewares/auth.js";
+import isAdmin from "./middlewares/isAdmin.js";
 import { connectDB } from "./config/db.js";
-import orderRoutes from "./routes/orderRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
@@ -55,7 +56,7 @@ app.get("/api/health", (req, res) => {
     });
 });
 
-app.use("/api", orderRoutes);
+
 app.use("/api", authRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api", paymentRoutes);
@@ -63,7 +64,7 @@ app.use("/api", productRoutes);
 
 
 
-app.use("/api/admin", adminRoutes);
+app.use("/api/admin",auth, isAdmin, adminRoutes);
 app.use("/api/webhook", webhookRoutes);
 
 app.use(

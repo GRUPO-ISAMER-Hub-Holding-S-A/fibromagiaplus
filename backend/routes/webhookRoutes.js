@@ -5,22 +5,19 @@ import Order from "../models/order.js";
 import Product from "../models/product.js";
 import { enviarMail } from "../services/mailer.js";
 
-
 const router = express.Router();
 
 const client = new MercadoPagoConfig({
     accessToken: process.env.MP_ACCESS_TOKEN
 });
 
-router.post("/webhook", async (req, res) => {
+router.post("/", async (req, res) => {
 
     try {
 
-        if (req.query.type !== "payment") {
-            return res.sendStatus(200);
-        }
-
-        const paymentId = req.query["data.id"];
+        const paymentId =
+            req.query["data.id"] ||
+            req.body?.data?.id;
 
         if (!paymentId) {
             return res.sendStatus(200);
@@ -41,25 +38,24 @@ router.post("/webhook", async (req, res) => {
         );
 
         if (!order) {
-            return res.sendStatus(200);
+            return res.sendStatus(404);
         }
 
+        // Evita ejecutar dos veces
         if (order.estadoPago === "Pagado") {
             return res.sendStatus(200);
         }
 
         order.estadoPago = "Pagado";
         order.paymentId = pago.id;
-        order.estadoEnvio = "Recibido";
+        order.preferenceId = pago.order?.id || "";
 
         await order.save();
 
         for (const item of order.productos) {
 
-            await Product.findOneAndUpdate(
-                {
-                    nombre: item.nombre
-                },
+            await Product.findByIdAndUpdate(
+                item.productId,
                 {
                     $inc: {
                         stock: -item.cantidad
@@ -69,9 +65,17 @@ router.post("/webhook", async (req, res) => {
 
         }
 
-        await enviarMail(order);
+        try {
 
-        console.log("✅ Pago confirmado:", order._id);
+            await enviarMail(order);
+
+        } catch (mailError) {
+
+            console.log("Mail no enviado:", mailError.message);
+
+        }
+
+        console.log("Pago aprobado:", order._id);
 
         res.sendStatus(200);
 

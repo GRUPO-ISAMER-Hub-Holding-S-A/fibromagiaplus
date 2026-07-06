@@ -1,86 +1,77 @@
 import mongoose from "mongoose";
 
-const orderSchema = new mongoose.Schema({
+const orderSchema = new mongoose.Schema(
+{
 
-    cliente: {
-
-        nombre: String,
-        apellido: String,
-        email: String,
-        telefono: String
-
+    cliente:{
+        nombre:String,
+        apellido:String,
+        email:String,
+        telefono:String
     },
 
-    envio: {
-
-        provincia: String,
-        ciudad: String,
-        calle: String,
-        altura: String,
-        piso: String,
-        departamento: String,
-        codigoPostal: String,
-        referencia: String
-
+    envio:{
+        provincia:String,
+        ciudad:String,
+        calle:String,
+        altura:String,
+        piso:String,
+        departamento:String,
+        codigoPostal:String,
+        referencia:String
     },
 
-    productos: [
-
+    productos:[
         {
 
-            productoId: String,
+            productId:{
+                type:mongoose.Schema.Types.ObjectId,
+                ref:"Product"
+            },
 
-            nombre: String,
+            nombre:String,
 
-            cantidad: Number,
+            precio:Number,
 
-            precio: Number
+            cantidad:Number
 
         }
-
     ],
 
-    total: {
-
-        type: Number,
-        required: true
-
+    total:{
+        type:Number,
+        required:true
     },
 
-    paymentId: {
-
-        type: String,
-        default: ""
-
+    estadoPago:{
+        type:String,
+        enum:[
+            "Pendiente",
+            "Pagado",
+            "Rechazado"
+        ],
+        default:"Pendiente"
     },
 
-    preferenceId: {
-
-        type: String,
-        default: ""
-
+    estadoEnvio:{
+        type:String,
+        enum:[
+            "Recibido",
+            "Preparando",
+            "Despachado",
+            "Entregado",
+            "Cancelado"
+        ],
+        default:"Recibido"
     },
 
-    estadoPago: {
+    paymentId:String,
 
-        type: String,
+    preferenceId:String
 
-        default: "Pendiente"
-
-    },
-
-    estadoEnvio: {
-
-        type: String,
-
-        default: "Recibido"
-
-    }
-
-}, {
-
-    timestamps: true
-
+},
+{
+    timestamps:true
 });
 
-export default mongoose.model("Order", orderSchema);
+export default mongoose.model("Order",orderSchema);

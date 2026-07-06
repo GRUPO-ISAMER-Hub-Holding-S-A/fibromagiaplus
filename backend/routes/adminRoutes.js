@@ -1,5 +1,7 @@
 import express from "express";
 import upload from "../middlewares/uploads.js";
+import auth from "../middlewares/auth.js";
+import isAdmin from "../middlewares/isAdmin.js";
 import {
     getProducts,
     getProductById,
@@ -16,6 +18,10 @@ const router = express.Router();
 // ==========================
 // PRODUCTOS
 // ==========================
+router.use(auth);
+
+router.use(isAdmin);
+
 
 router.get("/products", getProducts);
 

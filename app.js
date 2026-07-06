@@ -11,8 +11,7 @@ const API_BASE_URL =
             : "https://fibromagiaplus.onrender.com"
     );
 
-const cartDrawer =
-    document.getElementById("cartDrawer");
+
 
 
 // =======================
@@ -305,11 +304,31 @@ function actualizarContador() {
 // DRAWER
 // =======================
 
-function abrirCarrito() {
+function abrirCarrito(e) {
 
-    cartDrawer?.classList.add("open");
+    if (e) {
+
+        e.stopPropagation();
+
+    }
+
+    cartDrawer.classList.add("open");
+
+    document.body.classList.add("cart-open");
+
 }
 
+function cerrarCarrito() {
+
+    const drawer = document.getElementById("cartDrawer");
+
+    if (!drawer) return;
+
+    drawer.classList.remove("open");
+
+    document.body.classList.remove("cart-open");
+
+}
 
 // =======================
 // CHECKOUT MODAL
@@ -426,10 +445,52 @@ checkoutModal?.addEventListener(
 
 
 
-function cerrarCarrito() {
 
-    cartDrawer?.classList.remove("open");
-}
+
+// =======================
+// RESPONSIVE DRAWER
+// =======================
+
+// cerrar tocando fuera del carrito
+document.addEventListener("click", (e) => {
+
+    const drawer = document.getElementById("cartDrawer");
+    const icon = document.getElementById("cartIcon");
+
+    if (!drawer || !icon) return;
+
+    if (
+
+        drawer.classList.contains("open") &&
+        !drawer.contains(e.target) &&
+        !icon.contains(e.target)
+
+    ) {
+
+        cerrarCarrito();
+
+    }
+
+});
+
+
+// cerrar con ESC
+document.addEventListener("keydown", (e) => {
+
+    if (e.key === "Escape") {
+
+        cerrarCarrito();
+
+    }
+
+});
+
+// al pasar a desktop cerrar drawer
+window.addEventListener("resize", () => {
+
+    cerrarCarrito();
+
+});
 
 
 // =======================
@@ -438,10 +499,13 @@ function cerrarCarrito() {
 
 document
     .getElementById("cartIcon")
-    ?.addEventListener(
-        "click",
-        abrirCarrito
-    );
+    ?.addEventListener("click", (e) => {
+
+        e.stopPropagation();
+
+        abrirCarrito();
+
+    });
 
 document
     .getElementById("closeCart")
@@ -458,7 +522,11 @@ document
     );
 
 
+    cartDrawer.addEventListener("click", (e) => {
 
+    e.stopPropagation();
+
+    });
 
 // =======================
 // INIT
@@ -558,6 +626,14 @@ window.addEventListener(
 );
 
 
+
+window.addEventListener("orientationchange", () => {
+
+    cerrarCarrito();
+
+});
+
+
 //cerrar sesion
 
 function renderUser() {
@@ -586,11 +662,6 @@ function logout() {
 
 renderUser();
 
-
-// 8. INIT
-renderUser();
-renderCarrito();
-actualizarContador();
 
 
 
@@ -689,6 +760,8 @@ async function iniciarCheckout() {
 
         }
 
+
+
         // =====================
         // ITEMS
         // =====================
@@ -699,10 +772,9 @@ async function iniciarCheckout() {
 
             return {
 
+                productId: producto.id,
                 nombre: producto.nombre,
-
                 cantidad: item.cantidad,
-
                 precio: producto.precio
 
             };
@@ -776,5 +848,20 @@ async function iniciarCheckout() {
         alert("Error iniciando el checkout.");
 
     }
+
+}
+
+
+
+const menuToggle = document.getElementById("menuToggle");
+const navRight = document.getElementById("navRight");
+
+if (menuToggle && navRight) {
+
+    menuToggle.addEventListener("click", () => {
+
+        navRight.classList.toggle("open");
+
+    });
 
 }
