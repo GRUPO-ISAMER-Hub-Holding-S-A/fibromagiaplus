@@ -58,7 +58,7 @@ const orderSchema = new mongoose.Schema(
         enum:[
             "Recibido",
             "Preparando",
-            "Despachado",
+            "En camino",
             "Entregado",
             "Cancelado"
         ],

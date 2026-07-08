@@ -6,7 +6,12 @@
     <link rel="stylesheet" href="./styles.css" />
     <link rel="icon" href="./assets/muleta.png" />
     <title>LUMBAR FIX ADMIN</title>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Rehabilitacion, Medicina, Dolencias, Dolores, Tratamientos, salud.">
+    <meta name="keywords" content="salud, rehabilitación, medicina, dolores, tratamientos, bienestar">
+    <meta property="og:title" content="LUMBAR FIX - Soluciones para los dolores">
+    <meta property="og:description" content="Rehabilitacion, Medicina, Dolencias, Dolores, Tratamientos, salud.">
+
 
     <style>
         body {
@@ -16,6 +21,86 @@
             padding: 40px;
             padding-top: 120px;
         }
+
+
+        .admin-nav {
+
+            position: fixed;
+
+            top: 0;
+
+            left: 0;
+
+            right: 0;
+
+            height: 70px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            padding: 0 30px;
+
+            background: #050507;
+
+            border-bottom: 1px solid rgba(255, 255, 255, .08);
+
+            z-index: 9999;
+
+        }
+
+        .admin-nav .nav-logo {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            font-size: 18px;
+
+            font-weight: 700;
+
+            margin: 0;
+
+        }
+
+        .admin-nav .nav-right {
+
+            display: flex;
+
+            gap: 10px;
+
+            align-items: center;
+
+        }
+
+        .admin-nav button {
+
+            height: 40px;
+
+            padding: 0 18px;
+
+            border-radius: 8px;
+
+            background: #00d9ff;
+
+            color: #000;
+
+            border: none;
+
+            font-weight: 600;
+
+        }
+
+        .admin-nav button:hover {
+
+            background: #29e2ff;
+
+        }
+
 
         table {
             width: 100%;
@@ -58,28 +143,108 @@
         .modal-content input {
             margin-bottom: 10px;
         }
+
+        .order-actions {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 8px;
+
+        }
+
+        .status-btn {
+
+            padding: 10px;
+
+            border: none;
+
+            border-radius: 8px;
+
+            background: #222;
+
+            color: white;
+
+            cursor: pointer;
+
+            transition: .25s;
+
+            font-weight: 600;
+
+        }
+
+        .status-btn:hover {
+
+            background: #00d9ff;
+
+            color: black;
+
+        }
+
+        .status-btn.active {
+
+            background: #00d9ff;
+
+            color: black;
+
+        }
+
+        .status-btn.cancel:hover {
+
+            background: #ff4444;
+
+            color: white;
+
+        }
     </style>
+
+
 </head>
 
+<header>
+
+    <nav class="admin-nav" style="position:fixed;">
+
+        <a href="index.html" class="nav-logo">
+
+            <span class="nav-logo-dot"></span>
+
+            Lumbar Fix
+
+        </a>
+
+        <div class="nav-right">
+
+            <button onclick="goHome()">
+
+                🏠 Volver al sitio
+
+            </button>
+
+            <button onclick="logout()">
+
+                🚪 Cerrar sesión
+
+            </button>
+
+        </div>
+
+    </nav>
+
+</header>
+
+
 <body>
+
+
     <div id="cur"></div>
     <div id="cur-ring"></div>
 
-    <nav>
-        <a href="index.html" class="nav-logo">
-            <span class="nav-logo-dot"></span>LUMBAR FIX
-        </a>
 
-        <div class="nav-right"></div>
-    </nav>
 
     <h1>LUMBAR FIX ADMIN PANEL</h1>
 
-    <div style="display: flex; gap: 15px; margin-bottom: 30px">
-        <button onclick="goHome()">🏠 Volver al sitio</button>
-
-        <button onclick="logout()">🚪 Cerrar sesión</button>
-    </div>
 
     <h2>Nuevo Producto</h2>
 
@@ -119,29 +284,34 @@
 
     <div id="statsCards" style="display: flex; gap: 20px; margin-bottom: 30px; flex-wrap: wrap">
         <div class="card">
-            Pendientes:
-            <span id="pendingCount"> 0 </span>
-        </div>
+    💳 Pendientes de pago:
+    <span id="pendingCount">0</span>
+</div>
 
-        <div class="card">
-            Pagadas:
-            <span id="paidCount"> 0 </span>
-        </div>
+<div class="card">
+    📦 Preparando:
+    <span id="preparingCount">0</span>
+</div>
 
-        <div class="card">
-            Enviadas:
-            <span id="shippedCount"> 0 </span>
-        </div>
+<div class="card">
+    ✅ Pagadas:
+    <span id="paidCount">0</span>
+</div>
 
-        <div class="card">
-            Entregadas:
-            <span id="deliveredCount"> 0 </span>
-        </div>
+<div class="card">
+    🚚 En camino:
+    <span id="shippedCount">0</span>
+</div>
 
-        <div class="card">
-            Canceladas:
-            <span id="cancelledCount"> 0 </span>
-        </div>
+<div class="card">
+    📦 Entregadas:
+    <span id="deliveredCount">0</span>
+</div>
+
+<div class="card">
+    ❌ Canceladas:
+    <span id="cancelledCount">0</span>
+</div>
     </div>
 
     <hr style="margin: 50px 0" />
@@ -199,11 +369,23 @@
         }
 
         async function loadProducts() {
+
             try {
-                const res = await fetch(`${API_URL}/api/admin/products`);
+
+                const token = localStorage.getItem("token");
+
+                const res = await fetch(`${API_URL}/api/admin/products`, {
+
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+
+                });
 
                 if (!res.ok) {
+
                     throw new Error("Error cargando productos");
+
                 }
 
                 const products = await res.json();
@@ -212,16 +394,13 @@
 
                 table.innerHTML = "";
 
-                products.forEach((product) => {
+                products.forEach(product => {
+
                     table.innerHTML += `
             <tr>
 
                 <td>
-                    <img
-                        src="${product.img}"
-                        width="80"
-                        alt="${product.nombre}"
-                    >
+                    <img src="${product.img}" width="80">
                 </td>
 
                 <td>${product.nombre}</td>
@@ -232,19 +411,15 @@
 
                 <td>${product.stock}</td>
 
-                <td> $ ${product.precio}</td>
+                <td>$${product.precio}</td>
 
                 <td>
 
-                    <button
-                        onclick="editProduct('${product._id}')"
-                    >
+                    <button onclick="editProduct('${product._id}')">
                         Editar
                     </button>
 
-                    <button
-                        onclick="deleteProduct('${product._id}')"
-                    >
+                    <button onclick="deleteProduct('${product._id}')">
                         Eliminar
                     </button>
 
@@ -252,12 +427,19 @@
 
             </tr>
             `;
+
                 });
-            } catch (error) {
+
+            }
+
+            catch (error) {
+
                 console.error(error);
 
                 alert("Error cargando productos");
+
             }
+
         }
 
         async function loadOrders() {
@@ -280,9 +462,10 @@
                     (o) => o.estadoPago === "Pagado",
                 ).length;
 
-                document.getElementById("shippedCount").textContent = ordenes.filter(
-                    (o) => o.estadoEnvio === "Despachado",
-                ).length;
+                document.getElementById("shippedCount").textContent =
+                    ordenes.filter(
+                        (o) => o.estadoEnvio === "En camino"
+                    ).length;
 
                 document.getElementById("deliveredCount").textContent =
                     ordenes.filter((o) => o.estadoEnvio === "Entregado").length;
@@ -357,37 +540,50 @@ Envío:
 
 <td>
 
-<select id="status-${order._id}">
-
-    <option value="Recibido" ${order.estadoEnvio === "Recibido" ? "selected" : ""}>
-        Recibido
-    </option>
-
-    <option value="Preparando" ${order.estadoEnvio === "Preparando" ? "selected" : ""}>
-        Preparando
-    </option>
-
-    <option value="Cancelado"
-    ${order.estadoEnvio === "Cancelado" ? "selected" : ""}>
-        Cancelado
-    </option>
-
-    <option value="Entregado" ${order.estadoEnvio === "Entregado" ? "selected" : ""}>
-        Entregado
-    </option>
-
-</select>
-
-<br><br>
+<div class="order-actions">
 
 <button
-class="saveBtn"
-onclick="guardarEstado('${order._id}')"
->
+class="status-btn ${order.estadoEnvio === "Recibido" ? "active" : ""}"
+onclick="changeOrderStatus('${order._id}','Recibido')">
 
-💾 Guardar
+📥 Recibido
 
 </button>
+
+<button
+class="status-btn ${order.estadoEnvio === "Preparando" ? "active" : ""}"
+onclick="changeOrderStatus('${order._id}','Preparando')">
+
+📦 Preparando
+
+</button>
+
+<button
+class="status-btn ${order.estadoEnvio === "En camino" ? "active" : ""}"
+onclick="changeOrderStatus('${order._id}','En camino')">
+
+🚚 En camino
+
+</button>
+
+<button
+class="status-btn ${order.estadoEnvio === "Entregado" ? "active" : ""}"
+onclick="changeOrderStatus('${order._id}','Entregado')">
+
+✅ Entregado
+
+</button>
+
+<button
+class="status-btn cancel ${order.estadoEnvio === "Cancelado" ? "active" : ""}"
+onclick="changeOrderStatus('${order._id}','Cancelado')">
+
+❌ Cancelado
+
+</button>
+
+
+</div>
 
 <br><br>
 
@@ -413,13 +609,6 @@ onclick="deleteOrder('${order._id}')"
             }
         }
 
-        async function guardarEstado(id) {
-            const estado = document.getElementById(`status-${id}`).value;
-
-            await changeOrderStatus(id, estado);
-
-            alert("Estado actualizado correctamente.");
-        }
 
         async function changeOrderStatus(orderId, status) {
 

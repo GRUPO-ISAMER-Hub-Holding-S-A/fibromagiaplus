@@ -27,49 +27,42 @@ export const getOrders = async (req, res) => {
 };
 
 // Cambiar estado
-export const updateOrderStatus = async (req, res) => {
+export const updateOrderStatus = async (req,res)=>{
 
-    try {
+    try{
 
-        const { id } = req.params;
-        const { status } = req.body;
+        const {id}=req.params;
 
-        const order = await Order.findByIdAndUpdate(
+        const {status}=req.body;
+
+        const order=await Order.findByIdAndUpdate(
 
             id,
 
             {
-                status
+                estadoEnvio:status
             },
 
             {
-                new: true
+                new:true,
+                runValidators:true
             }
 
         );
 
-        res.json({
-
-            success: true,
-
-            order
-
-        });
+        res.json(order);
 
     }
 
-    catch (error) {
+    catch(error){
 
         console.error(error);
 
         res.status(500).json({
-
-            success: false,
-
-            message: "Error actualizando orden"
-
+            success:false,
+            message:error.message
         });
 
     }
 
-};
+}

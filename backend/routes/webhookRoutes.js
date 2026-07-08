@@ -54,13 +54,30 @@ router.post("/", async (req, res) => {
 
         for (const item of order.productos) {
 
-            await Product.findByIdAndUpdate(
-                item.productId,
+            await Product.findOneAndUpdate(
+
                 {
-                    $inc: {
-                        stock: -item.cantidad
+
+                    _id: item.productId,
+
+                    stock: {
+
+                        $gte: item.cantidad
+
                     }
+
+                },
+
+                {
+
+                    $inc: {
+
+                        stock: -item.cantidad
+
+                    }
+
                 }
+
             );
 
         }

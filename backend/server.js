@@ -66,6 +66,7 @@ app.use("/api", productRoutes);
 
 app.use("/api/admin",auth, isAdmin, adminRoutes);
 app.use("/api/webhook", webhookRoutes);
+app.disable("x-powered-by");
 
 app.use(
     "/uploads",
